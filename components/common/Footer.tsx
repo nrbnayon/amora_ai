@@ -19,7 +19,7 @@ const contactInfoData = [
 export const Footer = () => {
   return (
     <div className='bg-primary w-full'>
-      <footer className='flex flex-col w-full items-center max-w-7xl mx-auto pt-16 pb-8 px-8 bg-primary'>
+      <footer className='flex flex-col w-full items-center max-w-7xl mx-auto pt-16 pb-8 bg-primary'>
         {/* Main Footer Content */}
         <div className='grid grid-cols-4 gap-12 w-full mb-16'>
           {/* Brand Section */}
@@ -38,14 +38,14 @@ export const Footer = () => {
             <div className='flex items-center gap-4'>
               <a
                 href='#'
-                className='w-8 h-8 rounded-full border border-white flex items-center justify-center hover:bg-white hover:text-primary transition-colors'
+                className='w-8 h-8 rounded-full border border-white flex items-center justify-center text-white hover:bg-white hover:text-primary transition-colors'
                 aria-label='Facebook'
               >
                 <Facebook className='w-4 h-4' />
               </a>
               <a
                 href='#'
-                className='w-8 h-8 rounded-full border border-white flex items-center justify-center hover:bg-white hover:text-primary transition-colors'
+                className='w-8 h-8 rounded-full border border-white flex items-center justify-center text-white hover:bg-white hover:text-primary transition-colors'
                 aria-label='Pinterest'
               >
                 <svg
@@ -58,7 +58,7 @@ export const Footer = () => {
               </a>
               <a
                 href='#'
-                className='w-8 h-8 rounded-full border border-white flex items-center justify-center hover:bg-white hover:text-primary transition-colors'
+                className='w-8 h-8 rounded-full border border-white flex items-center justify-center text-white hover:bg-white hover:text-primary transition-colors'
                 aria-label='Twitter'
               >
                 <svg
@@ -71,7 +71,7 @@ export const Footer = () => {
               </a>
               <a
                 href='#'
-                className='w-8 h-8 rounded-full border border-white flex items-center justify-center hover:bg-white hover:text-primary transition-colors'
+                className='w-8 h-8 rounded-full border border-white flex items-center justify-center text-white hover:bg-white hover:text-primary transition-colors'
                 aria-label='Instagram'
               >
                 <Instagram className='w-4 h-4' />
@@ -139,7 +139,7 @@ export const Footer = () => {
         {/* Footer Bottom */}
         <div className='flex items-center justify-between w-full pt-8 border-t border-white/20'>
           <p className='font-normal text-white text-sm leading-relaxed'>
-            © 2025 Amora AI. All rights reserved.
+            © 2023 Amora AI. All rights reserved.
           </p>
 
           <div className='flex items-center gap-2'>
