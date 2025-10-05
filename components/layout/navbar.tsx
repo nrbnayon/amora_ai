@@ -2,7 +2,7 @@ import { Button } from "../ui/button";
 
 export default function Navbar() {
   return (
-    <header className='bg-white/95 backdrop-blur-sm sticky top-0 left-0 right-0 z-50 px-2 py-5 md:py-7 shadow-sm'>
+    <header className='bg-white/95 backdrop-blur-sm  z-50 px-2 py-5 md:py-7 shadow-sm'>
       <div className='max-w-7xl mx-auto flex items-center justify-between'>
         <div className='text-primary text-xl md:text-2xl font-bold'>
           Amora AI
