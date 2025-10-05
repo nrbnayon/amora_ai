@@ -139,7 +139,7 @@ export const Footer = () => {
         {/* Footer Bottom */}
         <div className='flex items-center justify-between w-full pt-8 border-t border-white/20'>
           <p className='font-normal text-white text-sm leading-relaxed'>
-            © 2023 Amora AI. All rights reserved.
+            © 2025 Amora AI. All rights reserved.
           </p>
 
           <div className='flex items-center gap-2'>
