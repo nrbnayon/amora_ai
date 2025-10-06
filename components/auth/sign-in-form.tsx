@@ -1,11 +1,10 @@
-// components/auth/sign-in-form.tsx
 "use client";
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +22,7 @@ export function SignInForm() {
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
     setError,
   } = useForm<SignInFormData>({
@@ -32,12 +32,9 @@ export function SignInForm() {
   const onSubmit = async (data: SignInFormData) => {
     setIsLoading(true);
     try {
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Mock successful login
       console.log("Sign in data:", data);
-      router.push("/dashboard");
+      router.push("/question1");
     } catch (error) {
       setError("root", {
         message: "Invalid email or password. Please try again.",
@@ -62,7 +59,6 @@ export function SignInForm() {
 
       {/* Right Side - Form Container */}
       <div className="flex-1 flex items-center justify-center p-6 sm:p-8 lg:w-1/2">
-        {/* Form Card with Shadow */}
         <div
           className="w-full max-w-xl bg-white rounded-2xl p-8 sm:p-10"
           style={{ boxShadow: "0px 4px 24px rgba(0, 0, 0, 0.05)" }}
@@ -141,7 +137,18 @@ export function SignInForm() {
               {/* Remember Me & Forgot Password */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <Checkbox id="rememberMe" {...register("rememberMe")} />
+                  <Controller
+                    name="rememberMe"
+                    control={control}
+                    defaultValue={false}
+                    render={({ field }) => (
+                      <Checkbox
+                        id="rememberMe"
+                        checked={field.value}
+                        onCheckedChange={field.onChange}
+                      />
+                    )}
+                  />
                   <Label
                     htmlFor="rememberMe"
                     className="text-sm font-normal cursor-pointer text-gray-900"
