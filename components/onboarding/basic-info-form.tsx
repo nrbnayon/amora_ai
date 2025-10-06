@@ -1,20 +1,23 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Users, DollarSign } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { LoadingSpinner } from "@/components/ui/loading-spinner"
-import { basicInfoSchema, type BasicInfoFormData } from "@/lib/utils/validation"
-import { ROUTES } from "@/lib/constants"
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Users, DollarSign } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import {
+  basicInfoSchema,
+  type BasicInfoFormData,
+} from "@/lib/utils/validation";
+import { ROUTES } from "@/lib/constants";
 
 export function BasicInfoForm() {
-  const router = useRouter()
-  const [isLoading, setIsLoading] = React.useState(false)
+  const router = useRouter();
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const {
     register,
@@ -28,27 +31,27 @@ export function BasicInfoForm() {
       guestCount: 100,
       budget: 2500,
     },
-  })
+  });
 
-  const watchedGuestCount = watch("guestCount")
-  const watchedBudget = watch("budget")
+  const watchedGuestCount = watch("guestCount");
+  const watchedBudget = watch("budget");
 
   const onSubmit = async (data: BasicInfoFormData) => {
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      console.log("[v0] Basic info data:", data)
-      router.push(ROUTES.DASHBOARD)
+      console.log("  Basic info data:", data);
+      router.push(ROUTES.DASHBOARD);
     } catch (error) {
       setError("root", {
         message: "Something went wrong. Please try again.",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   return (
     <div className="space-y-8">
@@ -69,7 +72,11 @@ export function BasicInfoForm() {
               {...register("guestCount", { valueAsNumber: true })}
             />
           </div>
-          {errors.guestCount && <p className="text-sm text-destructive">{errors.guestCount.message}</p>}
+          {errors.guestCount && (
+            <p className="text-sm text-destructive">
+              {errors.guestCount.message}
+            </p>
+          )}
         </div>
 
         {/* Budget */}
@@ -88,11 +95,15 @@ export function BasicInfoForm() {
               {...register("budget", { valueAsNumber: true })}
             />
           </div>
-          {errors.budget && <p className="text-sm text-destructive">{errors.budget.message}</p>}
+          {errors.budget && (
+            <p className="text-sm text-destructive">{errors.budget.message}</p>
+          )}
         </div>
 
         {/* Note */}
-        <p className="text-sm text-muted-foreground">You'll be able to update all the answers later</p>
+        <p className="text-sm text-muted-foreground">
+          You'll be able to update all the answers later
+        </p>
 
         {/* Submit Button */}
         <Button type="submit" className="w-full" disabled={isLoading}>
@@ -100,8 +111,12 @@ export function BasicInfoForm() {
           Next
         </Button>
 
-        {errors.root && <p className="text-sm text-destructive text-center">{errors.root.message}</p>}
+        {errors.root && (
+          <p className="text-sm text-destructive text-center">
+            {errors.root.message}
+          </p>
+        )}
       </form>
     </div>
-  )
+  );
 }

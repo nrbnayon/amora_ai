@@ -15,17 +15,18 @@ export default function ClientLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`font-sans antialiased text-rendering-optimized ${GeistSans.variable} ${GeistMono.variable}`}
       >
         <StructuredData />
         <Suspense fallback={null}>
           <ThemeProvider
-            attribute='class'
-            defaultTheme='system'
+            attribute="class"
+            defaultTheme="light"
             enableSystem
             disableTransitionOnChange
+            forcedTheme="light"
           >
             {children}
             <Toaster />
