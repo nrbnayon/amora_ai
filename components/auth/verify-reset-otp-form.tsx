@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
+import { Input } from "../ui/input";
 
 export function VerifyResetOTPForm() {
   const router = useRouter();
@@ -167,9 +168,11 @@ export function VerifyResetOTPForm() {
               {/* OTP Input Fields */}
               <div className="flex gap-3 justify-center">
                 {otp.map((digit, index) => (
-                  <input
+                  <Input
                     key={index}
-                    ref={(el) => { inputRefs.current[index] = el; }}
+                    ref={(el) => {
+                      inputRefs.current[index] = el;
+                    }}
                     type="text"
                     inputMode="numeric"
                     maxLength={1}
@@ -177,7 +180,7 @@ export function VerifyResetOTPForm() {
                     onChange={(e) => handleChange(index, e.target.value)}
                     onKeyDown={(e) => handleKeyDown(index, e)}
                     onPaste={handlePaste}
-                    className="w-16 h-16 text-center text-2xl font-semibold border-2 border-gray-200 rounded-lg focus:border-gray-900 focus:outline-none transition-colors"
+                    className="w-16 h-16 text-center text-2xl font-semibold border-2 border-gray-200 rounded-md focus:border-gray-900 focus:outline-none transition-colors"
                     style={{
                       borderColor: digit ? "#8B1874" : undefined,
                     }}
