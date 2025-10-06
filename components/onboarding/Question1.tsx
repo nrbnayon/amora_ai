@@ -19,6 +19,9 @@ export function Question1() {
   const router = useRouter();
   const [isLoading, setIsLoading] = React.useState(false);
 
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split("T")[0];
+
   const {
     register,
     handleSubmit,
@@ -49,117 +52,118 @@ export function Question1() {
 
   return (
     <OnboardingLayout
-      title="Basic information"
+      title='Basic information'
       description="Let's start with a few details about you and your big day"
       currentStep={1}
       totalSteps={4}
     >
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <form onSubmit={handleSubmit(onSubmit)} className='space-y-5'>
         {/* Your Name Field */}
-        <div className="space-y-2">
+        <div className='space-y-2'>
           <Label
-            htmlFor="yourName"
-            className="text-sm font-medium text-gray-900"
+            htmlFor='yourName'
+            className='text-sm font-medium text-gray-900'
           >
-            Your name <span className="text-red-500">*</span>
+            Your name <span className='text-red-500'>*</span>
           </Label>
           <Input
-            id="yourName"
-            type="text"
-            placeholder="Enter your name"
-            className="h-12 bg-white border-gray-200"
+            id='yourName'
+            type='text'
+            placeholder='Enter your name'
+            className='h-12 bg-white border-gray-200'
             {...register("yourName")}
           />
           {errors.yourName && (
-            <p className="text-sm text-red-500">{errors.yourName.message}</p>
+            <p className='text-sm text-red-500'>{errors.yourName.message}</p>
           )}
         </div>
 
         {/* Partner's Name Field */}
-        <div className="space-y-2">
+        <div className='space-y-2'>
           <Label
-            htmlFor="partnerName"
-            className="text-sm font-medium text-gray-900"
+            htmlFor='partnerName'
+            className='text-sm font-medium text-gray-900'
           >
-            Partner's name <span className="text-red-500">*</span>
+            Partner's name <span className='text-red-500'>*</span>
           </Label>
           <Input
-            id="partnerName"
-            type="text"
+            id='partnerName'
+            type='text'
             placeholder="Enter partner's name"
-            className="h-12 bg-white border-gray-200"
+            className='h-12 bg-white border-gray-200'
             {...register("partnerName")}
           />
           {errors.partnerName && (
-            <p className="text-sm text-red-500">{errors.partnerName.message}</p>
+            <p className='text-sm text-red-500'>{errors.partnerName.message}</p>
           )}
         </div>
 
         {/* Wedding Location Field */}
-        <div className="space-y-2">
+        <div className='space-y-2'>
           <Label
-            htmlFor="weddingLocation"
-            className="text-sm font-medium text-gray-900"
+            htmlFor='weddingLocation'
+            className='text-sm font-medium text-gray-900'
           >
-            Wedding location <span className="text-red-500">*</span>
+            Wedding location <span className='text-red-500'>*</span>
           </Label>
           <Input
-            id="weddingLocation"
-            type="text"
-            placeholder="Enter wedding location"
-            className="h-12 bg-white border-gray-200"
+            id='weddingLocation'
+            type='text'
+            placeholder='Enter wedding location'
+            className='h-12 bg-white border-gray-200'
             {...register("weddingLocation")}
           />
           {errors.weddingLocation && (
-            <p className="text-sm text-red-500">
+            <p className='text-sm text-red-500'>
               {errors.weddingLocation.message}
             </p>
           )}
         </div>
 
         {/* Wedding Date Field */}
-        <div className="space-y-2">
+        <div className='space-y-2'>
           <Label
-            htmlFor="weddingDate"
-            className="text-sm font-medium text-gray-900"
+            htmlFor='weddingDate'
+            className='text-sm font-medium text-gray-900'
           >
             Approximate date of your wedding{" "}
-            <span className="text-red-500">*</span>
+            <span className='text-red-500'>*</span>
           </Label>
           <Input
-            id="weddingDate"
-            type="date"
-            placeholder="dd-mm-yyyy"
-            className="h-12 bg-white border-gray-200"
+            id='weddingDate'
+            type='date'
+            placeholder='dd-mm-yyyy'
+            className='h-12 bg-white border-gray-200'
+            min={today}
             {...register("weddingDate")}
           />
           {errors.weddingDate && (
-            <p className="text-sm text-red-500">{errors.weddingDate.message}</p>
+            <p className='text-sm text-red-500'>{errors.weddingDate.message}</p>
           )}
         </div>
 
         {/* Info Text */}
-        <p className="text-sm text-gray-600">
+        <p className='text-sm text-gray-600'>
           You'll be able to update all the answers later
         </p>
 
         {/* Error Message */}
         {errors.root && (
-          <p className="text-sm text-red-500 text-center">
+          <p className='text-sm text-red-500 text-center'>
             {errors.root.message}
           </p>
         )}
 
         {/* Submit Button */}
         <Button
-          type="submit"
-          className="w-full h-12 text-white font-medium"
+          type='submit'
+          className='w-full h-12 text-white font-medium'
           style={{ backgroundColor: "#8B1874" }}
           disabled={isLoading}
         >
           {isLoading ? (
             <>
-              <LoadingSpinner size="sm" className="mr-2" />
+              <LoadingSpinner size='sm' className='mr-2' />
               Next...
             </>
           ) : (

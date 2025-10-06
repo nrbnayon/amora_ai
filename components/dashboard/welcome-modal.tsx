@@ -11,25 +11,26 @@ export function WelcomeModal() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="sm:max-w-md">
-        <DialogHeader className="text-center space-y-4">
+        <DialogHeader className="text-center space-y-4 px-5">
           <div className="mx-auto">
             <Image
-              src="/wedding-couple-illustration.jpg"
+              src="/welcome.png"
               alt="Wedding couple illustration"
               width={120}
               height={120}
               className="mx-auto"
             />
           </div>
-          <DialogTitle className="text-2xl font-bold">Welcome to Amora AI</DialogTitle>
-          <p className="text-muted-foreground">
+          <DialogTitle className="text-2xl text-center font-bold pb-0 mb-0">Welcome to Amora AI</DialogTitle>
+          <p className="text-muted-foreground text-center">
             Make your smart planning AI partner. Ready to make plannings fast and easy?
           </p>
         </DialogHeader>
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-center">
           <Button
+            size="lg"
             onClick={() => setIsOpen(false)}
-            className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+            className="w-[80%] bg-primary text-primary-foreground hover:bg-primary/90"
           >
             Get Started
           </Button>
