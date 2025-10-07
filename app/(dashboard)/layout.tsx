@@ -12,7 +12,7 @@ export default function DashboardLayout({
       <DashboardSidebar />
 
       {/* Main Content */}
-      <main className="flex-1 p-8">{children}</main>
+      <main className="flex-1 p-4 md:px-8 py-3 bg-[#F3F3F3]">{children}</main>
     </div>
   );
 }
