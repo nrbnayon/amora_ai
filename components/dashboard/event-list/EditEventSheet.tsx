@@ -10,7 +10,11 @@ import {
 import { X } from "lucide-react";
 import { Event } from "./EventListPage";
 import { Button } from "@/components/ui/button";
-import { convertToDisplayDate, convertToInputDate, getTodayDate } from "@/lib/utils";
+import {
+  convertToDisplayDate,
+  convertToInputDate,
+  getTodayDate,
+} from "@/lib/utils";
 
 interface EditEventSheetProps {
   isOpen: boolean;
@@ -27,22 +31,96 @@ export function EditEventSheet({
 }: EditEventSheetProps) {
   const [formData, setFormData] = useState<Event>(event);
 
+  const [errors, setErrors] = useState({
+    name: false,
+    date: false,
+    startTime: false,
+    endTime: false,
+    location: false,
+    description: false,
+  });
+
+  const [touched, setTouched] = useState({
+    name: false,
+    date: false,
+    startTime: false,
+    endTime: false,
+    location: false,
+    description: false,
+  });
+
   useEffect(() => {
     setFormData(event);
+    setErrors({
+      name: false,
+      date: false,
+      startTime: false,
+      endTime: false,
+      location: false,
+      description: false,
+    });
+    setTouched({
+      name: false,
+      date: false,
+      startTime: false,
+      endTime: false,
+      location: false,
+      description: false,
+    });
   }, [event]);
 
   const handleChange = (field: keyof Event, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    setErrors((prev) => ({ ...prev, [field]: !value }));
+  };
+
+  const handleBlur = (field: keyof typeof errors) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+    setErrors((prev) => ({ ...prev, [field]: !formData[field] }));
+  };
+
+  const validateForm = () => {
+    const newErrors = {
+      name: !formData.name,
+      date: !formData.date,
+      startTime: !formData.startTime,
+      endTime: !formData.endTime,
+      location: !formData.location,
+      description: !formData.description,
+    };
+
+    setErrors(newErrors);
+    setTouched({
+      name: true,
+      date: true,
+      startTime: true,
+      endTime: true,
+      location: true,
+      description: true,
+    });
+
+    return !Object.values(newErrors).some((error) => error);
   };
 
   const handleSubmit = () => {
-    onUpdate(formData);
+    if (validateForm()) {
+      onUpdate(formData);
+    }
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputDate = e.target.value;
     const displayDate = convertToDisplayDate(inputDate);
     handleChange("date", displayDate);
+  };
+
+  const getInputClassName = (fieldName: keyof typeof errors) => {
+    const baseClass =
+      "w-full px-4 py-2 rounded-md bg-white text-gray-900 border focus:outline-none focus:ring-2";
+    if (touched[fieldName] && errors[fieldName]) {
+      return `${baseClass} border-red-500 focus:ring-red-300`;
+    }
+    return `${baseClass} border-gray-200 focus:ring-pink-300`;
   };
 
   return (
@@ -66,42 +144,53 @@ export function EditEventSheet({
           {/* Event Name */}
           <div>
             <label className="block text-sm font-medium mb-2">
-              Event Name <span className="text-red-300">*</span>
+              Event Name <span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               value={formData.name}
               onChange={(e) => handleChange("name", e.target.value)}
-              className="w-full px-4 py-2 rounded-md bg-white text-gray-900 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-300"
+              onBlur={() => handleBlur("name")}
+              className={getInputClassName("name")}
               placeholder="Engagement Party"
             />
+            {touched.name && errors.name && (
+              <p className="text-red-500 text-sm mt-1">
+                Event name is required
+              </p>
+            )}
           </div>
 
           {/* Date */}
           <div>
             <label className="block text-sm font-medium mb-2">
-              Date <span className="text-red-300">*</span>
+              Date <span className="text-red-500">*</span>
             </label>
             <div className="relative">
               <input
                 type="date"
                 value={convertToInputDate(formData.date)}
                 onChange={handleDateChange}
+                onBlur={() => handleBlur("date")}
                 min={getTodayDate()}
-                className="w-full px-4 py-2 rounded-md bg-white text-gray-900 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-300"
+                className={getInputClassName("date")}
               />
             </div>
+            {touched.date && errors.date && (
+              <p className="text-red-500 text-sm mt-1">Date is required</p>
+            )}
           </div>
 
           {/* Event Starts */}
           <div>
             <label className="block text-sm font-medium mb-2">
-              Event Starts <span className="text-red-300">*</span>
+              Event Starts <span className="text-red-500">*</span>
             </label>
             <select
               value={formData.startTime}
               onChange={(e) => handleChange("startTime", e.target.value)}
-              className="w-full px-4 py-2 rounded-md bg-white text-gray-900 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-300"
+              onBlur={() => handleBlur("startTime")}
+              className={getInputClassName("startTime")}
             >
               <option value="">Select time</option>
               <option value="10:00 am">10:00 am</option>
@@ -116,17 +205,23 @@ export function EditEventSheet({
               <option value="7:00 pm">7:00 pm</option>
               <option value="8:00 pm">8:00 pm</option>
             </select>
+            {touched.startTime && errors.startTime && (
+              <p className="text-red-500 text-sm mt-1">
+                Start time is required
+              </p>
+            )}
           </div>
 
           {/* Event Ends */}
           <div>
             <label className="block text-sm font-medium mb-2">
-              Event Ends <span className="text-red-300">*</span>
+              Event Ends <span className="text-red-500">*</span>
             </label>
             <select
               value={formData.endTime}
               onChange={(e) => handleChange("endTime", e.target.value)}
-              className="w-full px-4 py-2 rounded-md bg-white text-gray-900 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-300"
+              onBlur={() => handleBlur("endTime")}
+              className={getInputClassName("endTime")}
             >
               <option value="">Select time</option>
               <option value="11:00 am">11:00 am</option>
@@ -142,17 +237,21 @@ export function EditEventSheet({
               <option value="9:00 pm">9:00 pm</option>
               <option value="10:00 pm">10:00 pm</option>
             </select>
+            {touched.endTime && errors.endTime && (
+              <p className="text-red-500 text-sm mt-1">End time is required</p>
+            )}
           </div>
 
           {/* Location */}
           <div>
             <label className="block text-sm font-medium mb-2">
-              Location <span className="text-red-300">*</span>
+              Location <span className="text-red-500">*</span>
             </label>
             <select
               value={formData.location}
               onChange={(e) => handleChange("location", e.target.value)}
-              className="w-full px-4 py-2 rounded-md bg-white text-gray-900 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-300"
+              onBlur={() => handleBlur("location")}
+              className={getInputClassName("location")}
             >
               <option value="">Select location</option>
               <option value="Family Home">Family Home</option>
@@ -162,20 +261,29 @@ export function EditEventSheet({
               <option value="Hotel">Hotel</option>
               <option value="Restaurant">Restaurant</option>
             </select>
+            {touched.location && errors.location && (
+              <p className="text-red-500 text-sm mt-1">Location is required</p>
+            )}
           </div>
 
           {/* Description */}
           <div>
             <label className="block text-sm font-medium mb-2">
-              Description <span className="text-red-300">*</span>
+              Description <span className="text-red-500">*</span>
             </label>
-            <input
-              type="text"
+            <textarea
               value={formData.description}
               onChange={(e) => handleChange("description", e.target.value)}
-              className="w-full px-4 py-2 rounded-md bg-white text-gray-900 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-300"
+              onBlur={() => handleBlur("description")}
+              className={getInputClassName("description")}
               placeholder="Casual gathering"
+              rows={4}
             />
+            {touched.description && errors.description && (
+              <p className="text-red-500 text-sm mt-1">
+                Description is required
+              </p>
+            )}
           </div>
 
           {/* Update Button */}

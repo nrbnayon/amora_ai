@@ -55,26 +55,26 @@ export default function EventDetailsPage() {
   return (
     <div className="w-full mx-auto">
       {/* Header */}
-      <div className="mb-8 border-b">
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between">
-          <div>
-            <h1 className="text-2xl md:text-4xl font-semibold text-gray-900">
+      <div className="mb-8 border-b pb-3">
+        <div className="flex flex-wrap items-center justify-center md:justify-between gap-3">
+          <div className="text-center md:text-left">
+            <h1 className="text-xl md:text-3xl font-semibold text-gray-900">
               Event Details
             </h1>
-            <p className="text-gray-600 mb-2">
+            <p className="text-gray-600 text-sm md:text-base">
               A clear view of your wedding and upcoming tasks
             </p>
           </div>
-          <div className="flex gap-4 items-center mt-4 lg:mt-0">
+          <div className="flex gap-4">
             <Link
               href="/dashboard"
-              className="px-4 py-2 text-gray-400 font-medium hover:text-gray-600"
+              className="text-gray-500 font-medium hover:text-gray-700 pb-1"
             >
               Dashboard
             </Link>
             <Link
               href="/dashboard/event-details"
-              className="px-4 py-2 text-gray-900 font-medium border-b-2 border-gray-900"
+              className="text-gray-900 font-medium border-b-2 border-gray-900 pb-1"
             >
               Event Details
             </Link>

@@ -5,8 +5,9 @@ import { EventCard } from "./EventCard";
 import { AddEventSheet } from "./AddEventSheet";
 import { EditEventSheet } from "./EditEventSheet";
 import { ExportSheet } from "./ExportSheet";
-import { Plus, Upload } from "lucide-react";
+import { Plus, SquareArrowOutUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export interface Event {
   id: string;
@@ -134,6 +135,9 @@ export default function EventListPage() {
     };
     setEvents([...events, event]);
     setIsAddSheetOpen(false);
+    toast.success("Event added successfully!", {
+      description: `${newEvent.name} has been added to your event list.`,
+    });
   };
 
   const handleEditEvent = (updatedEvent: Event) => {
@@ -144,10 +148,23 @@ export default function EventListPage() {
     );
     setIsEditSheetOpen(false);
     setSelectedEvent(null);
+    toast.success("Event updated successfully!", {
+      description: `${updatedEvent.name} has been updated.`,
+    });
   };
 
   const handleDeleteEvent = (id: string) => {
+    const eventToDelete = events.find((event) => event.id === id);
     setEvents(events.filter((event) => event.id !== id));
+    toast.success("Event deleted successfully!", {
+      description: `${eventToDelete?.name} has been removed from your event list.`,
+    });
+  };
+
+  const handleExport = (format: string, webLink?: string) => {
+    toast.success(`Exporting as ${format}`, {
+      description: "Your event list is being prepared for download.",
+    });
   };
 
   const openEditSheet = (event: Event) => {
@@ -179,7 +196,7 @@ export default function EventListPage() {
               onClick={() => setIsExportSheetOpen(true)}
               className="text-gray-900 hover:bg-gray-50 transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"
             >
-              <Upload className="w-4 h-4" />
+              <SquareArrowOutUpRight className="w-4 h-4" />
               Export
             </Button>
             <Button
@@ -229,6 +246,8 @@ export default function EventListPage() {
         <ExportSheet
           isOpen={isExportSheetOpen}
           onClose={() => setIsExportSheetOpen(false)}
+          onExport={handleExport}
+          events={events}
         />
       </div>
     </div>
