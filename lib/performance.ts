@@ -1,4 +1,6 @@
 // Performance monitoring utilities
+import * as webVitals from "web-vitals";
+
 export function measurePerformance(name: string, fn: () => void) {
   if (typeof window !== "undefined" && "performance" in window) {
     const start = performance.now()
@@ -11,15 +13,14 @@ export function measurePerformance(name: string, fn: () => void) {
 }
 
 // Web Vitals tracking
+
 export function trackWebVitals() {
   if (typeof window !== "undefined") {
-    import("web-vitals").then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
-      getCLS(console.log)
-      getFID(console.log)
-      getFCP(console.log)
-      getLCP(console.log)
-      getTTFB(console.log)
-    })
+    webVitals.onCLS(console.log)
+    webVitals.onINP(console.log)
+    webVitals.onFCP(console.log)
+    webVitals.onLCP(console.log)
+    webVitals.onTTFB(console.log)
   }
 }
 

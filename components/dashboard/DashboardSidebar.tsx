@@ -19,6 +19,7 @@ import {
   Search,
   Menu,
   X,
+  BanknoteArrowUp,
 } from "lucide-react";
 
 interface MenuItem {
@@ -71,8 +72,13 @@ export default function DashboardSidebar() {
       },
       {
         name: "Assistant",
-        href: "/dashboard/assistant",
+        href: "/dashboard/ai-assistant",
         icon: Sparkles,
+      },
+      {
+        name: "Upgrade Plan",
+        href: "/dashboard/upgrade",
+        icon: BanknoteArrowUp,
       },
       {
         name: "Settings",

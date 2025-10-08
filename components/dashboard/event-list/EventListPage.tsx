@@ -175,14 +175,17 @@ export default function EventListPage() {
   return (
     <div className="w-full mx-auto">
       {/* Header */}
-      <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold text-gray-900 mb-2">
-          Event List
-        </h1>
-        <p className="text-sm sm:text-base text-gray-600">
-          Build and customize events using AI
-        </p>
+      <div className="flex flex-wrap items-center justify-center md:justify-between gap-3 border-b pb-3 mb-4">
+        <div className="text-center md:text-left">
+          <h1 className="text-xl md:text-3xl font-semibold text-gray-900">
+            Event List
+          </h1>
+          <p className="text-gray-600 text-sm md:text-base">
+            Build and customize events using AI
+          </p>
+        </div>
       </div>
+
       <div className="bg-white p-4 sm:p-6 rounded-2xl">
         {/* Section Header with Actions */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
