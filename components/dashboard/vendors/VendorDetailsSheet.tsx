@@ -43,7 +43,7 @@ export function VendorDetailsSheet({
           </div>
         </SheetHeader>
 
-        <div className="bg-white p-6 min-h-fit">
+        <div className="bg-white p-6 min-h-fit md:min-h-screen">
           {/* Image Gallery */}
           <div className="space-y-3 mb-6">
             {vendor.images.length === 1 ? (

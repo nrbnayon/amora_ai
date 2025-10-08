@@ -1,5 +1,4 @@
-// components/event-list/ExportSheet.tsx
-"use client";
+// components/guests/GuestsExportSheet.tsx
 import React, { useState } from "react";
 import {
   Sheet,
@@ -9,30 +8,26 @@ import {
 } from "@/components/ui/sheet";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Event } from "./EventListPage";
+import { Guest, Table } from "./GuestsSeatingPage";
 import { toast } from "sonner";
 
-interface ExportSheetProps {
+interface GuestsExportSheetProps {
   isOpen: boolean;
   onClose: () => void;
-  onExport: (format: string, webLink?: string) => void;
-  events: Event[];
+  guests: Guest[];
+  tables: Table[];
 }
 
-export function ExportSheet({
+export function GuestsExportSheet({
   isOpen,
   onClose,
-  onExport,
-  events,
-}: ExportSheetProps) {
+  guests,
+  tables,
+}: GuestsExportSheetProps) {
   const [selectedFormat, setSelectedFormat] = useState<string>("");
   const [webLink, setWebLink] = useState<string>("");
-  const [errors, setErrors] = useState({
-    format: false,
-  });
-  const [touched, setTouched] = useState({
-    format: false,
-  });
+  const [errors, setErrors] = useState({ format: false });
+  const [touched, setTouched] = useState({ format: false });
 
   const handleFormatChange = (format: string) => {
     setSelectedFormat(format);
@@ -42,20 +37,25 @@ export function ExportSheet({
 
   const generateCSV = () => {
     const headers = [
-      "Event Name",
-      "Date",
-      "Start Time",
-      "End Time",
-      "Location",
-      "Description",
+      "Guest Name",
+      "Group",
+      "Email",
+      "Address",
+      "Phone",
+      "Dietary",
+      "Status",
+      "Assigned Table",
     ];
-    const rows = events.map((event) => [
-      event.name,
-      event.date,
-      event.startTime,
-      event.endTime,
-      event.location,
-      event.description,
+
+    const rows = guests.map((guest) => [
+      guest.name,
+      guest.group,
+      guest.email,
+      guest.address,
+      guest.phone,
+      guest.dietary,
+      guest.status,
+      guest.assignedTable,
     ]);
 
     const csvContent = [
@@ -67,7 +67,7 @@ export function ExportSheet({
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
-    link.setAttribute("download", `event-list-${Date.now()}.csv`);
+    link.setAttribute("download", `guests-list-${Date.now()}.csv`);
     link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
@@ -80,7 +80,7 @@ export function ExportSheet({
       <html>
       <head>
         <meta charset="utf-8">
-        <title>Event List</title>
+        <title>Guests List</title>
         <style>
           body { 
             font-family: Arial, sans-serif; 
@@ -88,33 +88,40 @@ export function ExportSheet({
             color: #333;
           }
           h1 { 
-            color: #E91E63; 
+            color: #7c3aed; 
             margin-bottom: 30px;
             font-size: 32px;
+            text-align: center;
           }
-          .event { 
-            margin-bottom: 30px; 
-            padding: 20px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            page-break-inside: avoid;
+          table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px;
           }
-          .event h2 { 
-            color: #E91E63; 
-            margin-top: 0;
-            font-size: 24px;
-            margin-bottom: 15px;
+          th, td { 
+            border: 1px solid #ddd; 
+            padding: 12px; 
+            text-align: left;
           }
-          .event-detail { 
-            margin: 10px 0;
-            display: flex;
+          th { 
+            background-color: #7c3aed; 
+            color: white;
+            font-weight: bold;
           }
-          .event-detail strong { 
-            min-width: 120px;
-            color: #000;
+          tr:nth-child(even) { 
+            background-color: #f9f9f9;
           }
-          .event-detail span {
-            color: #666;
+          .status-attending { 
+            color: #16a34a; 
+            font-weight: bold;
+          }
+          .status-pending { 
+            color: #ea580c; 
+            font-weight: bold;
+          }
+          .status-declined { 
+            color: #dc2626; 
+            font-weight: bold;
           }
           ${
             webLink
@@ -124,32 +131,39 @@ export function ExportSheet({
         </style>
       </head>
       <body>
-        <h1>Event List</h1>
-        ${events
-          .map(
-            (event) => `
-          <div class="event">
-            <h2>${event.name}</h2>
-            <div class="event-detail">
-              <strong>Date:</strong>
-              <span>${event.date}</span>
-            </div>
-            <div class="event-detail">
-              <strong>Time:</strong>
-              <span>${event.startTime} - ${event.endTime}</span>
-            </div>
-            <div class="event-detail">
-              <strong>Location:</strong>
-              <span>${event.location}</span>
-            </div>
-            <div class="event-detail">
-              <strong>Type:</strong>
-              <span>${event.description}</span>
-            </div>
-          </div>
-        `
-          )
-          .join("")}
+        <h1>Guests & Seating List</h1>
+        <table>
+          <thead>
+            <tr>
+              <th>Guest Name</th>
+              <th>Group</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Dietary</th>
+              <th>Status</th>
+              <th>Assigned Table</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${guests
+              .map(
+                (guest) => `
+              <tr>
+                <td>${guest.name}</td>
+                <td>${guest.group}</td>
+                <td>${guest.email}</td>
+                <td>${guest.phone}</td>
+                <td>${guest.dietary}</td>
+                <td class="status-${guest.status.toLowerCase()}">${
+                  guest.status
+                }</td>
+                <td>${guest.assignedTable}</td>
+              </tr>
+            `
+              )
+              .join("")}
+          </tbody>
+        </table>
         ${
           webLink
             ? `<div class="web-link"><strong>Web Link:</strong> ${webLink}</div>`
@@ -177,57 +191,69 @@ export function ExportSheet({
       <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
       <head>
         <meta charset='utf-8'>
-        <title>Event List</title>
+        <title>Guests List</title>
         <style>
           body { 
             font-family: Arial, sans-serif; 
             padding: 40px;
           }
           h1 { 
-            color: #E91E63; 
+            color: #7c3aed; 
             margin-bottom: 30px;
+            text-align: center;
           }
-          .event { 
-            margin-bottom: 30px; 
-            padding: 20px;
-            border: 1px solid #e0e0e0;
+          table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 20px;
           }
-          .event h2 { 
-            color: #E91E63; 
-            margin-top: 0;
+          th, td { 
+            border: 1px solid #ddd; 
+            padding: 12px; 
+            text-align: left;
           }
-          .event-detail { 
-            margin: 10px 0;
+          th { 
+            background-color: #7c3aed; 
+            color: white;
+            font-weight: bold;
           }
-          .event-detail strong { 
-            min-width: 120px;
-            display: inline-block;
+          tr:nth-child(even) { 
+            background-color: #f9f9f9;
           }
         </style>
       </head>
       <body>
-        <h1>Event List</h1>
-        ${events
-          .map(
-            (event) => `
-          <div class="event">
-            <h2>${event.name}</h2>
-            <div class="event-detail">
-              <strong>Date:</strong> ${event.date}
-            </div>
-            <div class="event-detail">
-              <strong>Time:</strong> ${event.startTime} - ${event.endTime}
-            </div>
-            <div class="event-detail">
-              <strong>Location:</strong> ${event.location}
-            </div>
-            <div class="event-detail">
-              <strong>Type:</strong> ${event.description}
-            </div>
-          </div>
-        `
-          )
-          .join("")}
+        <h1>Guests & Seating List</h1>
+        <table>
+          <thead>
+            <tr>
+              <th>Guest Name</th>
+              <th>Group</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Dietary</th>
+              <th>Status</th>
+              <th>Assigned Table</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${guests
+              .map(
+                (guest) => `
+              <tr>
+                <td>${guest.name}</td>
+                <td>${guest.group}</td>
+                <td>${guest.email}</td>
+                <td>${guest.phone}</td>
+                <td>${guest.dietary}</td>
+                <td>${guest.status}</td>
+                <td>${guest.assignedTable}</td>
+              </tr>
+            `
+              )
+              .join("")}
+          </tbody>
+        </table>
         ${
           webLink
             ? `<div style="margin-top: 30px;"><strong>Web Link:</strong> ${webLink}</div>`
@@ -244,7 +270,7 @@ export function ExportSheet({
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `event-list-${Date.now()}.doc`;
+    link.download = `guests-list-${Date.now()}.doc`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -256,7 +282,7 @@ export function ExportSheet({
       setErrors({ format: true });
       setTouched({ format: true });
       toast.error("Please select a format", {
-        description: "Choose PDF, CSV, or DOC to export your event list.",
+        description: "Choose PDF, CSV, or DOC to export your guests list.",
       });
       return;
     }
@@ -277,7 +303,9 @@ export function ExportSheet({
           return;
       }
 
-      onExport(selectedFormat, webLink);
+      toast.success(`Exporting as ${selectedFormat}`, {
+        description: "Your guests list is being prepared for download.",
+      });
 
       setSelectedFormat("");
       setWebLink("");
@@ -287,7 +315,7 @@ export function ExportSheet({
     } catch (error) {
       toast.error("Export failed", {
         description:
-          "There was an error exporting your event list. Please try again.",
+          "There was an error exporting your guests list. Please try again.",
       });
     }
   };
@@ -312,10 +340,9 @@ export function ExportSheet({
         <div className="bg-white p-5 min-h-fit md:min-h-screen space-y-6">
           <div className="text-black">
             <p className="text-sm font-medium mb-4">
-              Export Event list as <span className="text-red-500">*</span>
+              Export Guest list as <span className="text-red-500">*</span>
             </p>
 
-            {/* PDF Option */}
             <label
               className={`flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-colors mb-3 text-black border ${
                 touched.format && errors.format
@@ -334,7 +361,6 @@ export function ExportSheet({
               <span className="font-medium">PDF</span>
             </label>
 
-            {/* CSV Option */}
             <label
               className={`flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-colors mb-3 text-black border ${
                 touched.format && errors.format
@@ -353,7 +379,6 @@ export function ExportSheet({
               <span className="font-medium">CSV</span>
             </label>
 
-            {/* DOC Option */}
             <label
               className={`flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-colors mb-3 text-black border ${
                 touched.format && errors.format
@@ -379,7 +404,6 @@ export function ExportSheet({
             )}
           </div>
 
-          {/* Web Link */}
           <div>
             <label className="block text-sm font-medium mb-2 text-black">
               Web link:
@@ -388,12 +412,11 @@ export function ExportSheet({
               type="text"
               value={webLink}
               onChange={(e) => setWebLink(e.target.value)}
-              className="w-full px-4 py-2 rounded-lg bg-white text-gray-900 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-300"
+              className="w-full px-4 py-2 rounded-lg bg-white text-gray-900 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-300"
               placeholder="Enter web link (optional)"
             />
           </div>
 
-          {/* Done Button */}
           <div className="flex justify-end">
             <Button
               size="lg"

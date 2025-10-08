@@ -140,7 +140,7 @@ export function EditEventSheet({
           </div>
         </SheetHeader>
 
-        <div className="bg-white text-black p-5 min-h-fit space-y-6">
+        <div className="bg-white text-black p-5 min-h-fit md:min-h-screen space-y-6">
           {/* Event Name */}
           <div>
             <label className="block text-sm font-medium mb-2">

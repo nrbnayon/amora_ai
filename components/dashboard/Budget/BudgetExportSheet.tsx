@@ -1,5 +1,4 @@
-// components/event-list/ExportSheet.tsx
-"use client";
+// components/budget/BudgetExportSheet.tsx
 import React, { useState } from "react";
 import {
   Sheet,
@@ -9,30 +8,32 @@ import {
 } from "@/components/ui/sheet";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Event } from "./EventListPage";
+import { BudgetItem } from "./BudgetPage";
 import { toast } from "sonner";
 
-interface ExportSheetProps {
+interface BudgetExportSheetProps {
   isOpen: boolean;
   onClose: () => void;
-  onExport: (format: string, webLink?: string) => void;
-  events: Event[];
+  budgetItems: BudgetItem[];
+  eventBudget: number;
+  totalEstimated: number;
+  totalActual: number;
+  totalPaid: number;
 }
 
-export function ExportSheet({
+export function BudgetExportSheet({
   isOpen,
   onClose,
-  onExport,
-  events,
-}: ExportSheetProps) {
+  budgetItems,
+  eventBudget,
+  totalEstimated,
+  totalActual,
+  totalPaid,
+}: BudgetExportSheetProps) {
   const [selectedFormat, setSelectedFormat] = useState<string>("");
   const [webLink, setWebLink] = useState<string>("");
-  const [errors, setErrors] = useState({
-    format: false,
-  });
-  const [touched, setTouched] = useState({
-    format: false,
-  });
+  const [errors, setErrors] = useState({ format: false });
+  const [touched, setTouched] = useState({ format: false });
 
   const handleFormatChange = (format: string) => {
     setSelectedFormat(format);
@@ -41,33 +42,39 @@ export function ExportSheet({
   };
 
   const generateCSV = () => {
-    const headers = [
-      "Event Name",
-      "Date",
-      "Start Time",
-      "End Time",
-      "Location",
-      "Description",
+    const headers = ["Category", "Vendor Name", "Estimated", "Actual", "Paid"];
+
+    const summaryRows = [
+      ["Event Budget", "", eventBudget, "", ""],
+      ["Total Estimated", "", totalEstimated, "", ""],
+      ["Total Actual", "", "", totalActual, ""],
+      ["Total Paid", "", "", "", totalPaid],
+      ["", "", "", "", ""],
     ];
-    const rows = events.map((event) => [
-      event.name,
-      event.date,
-      event.startTime,
-      event.endTime,
-      event.location,
-      event.description,
+
+    const dataRows = budgetItems.map((item) => [
+      item.category,
+      item.vendorName,
+      item.estimated,
+      item.actual,
+      item.paid,
     ]);
 
     const csvContent = [
       headers.join(","),
-      ...rows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
-    ].join("\n");
+      ...summaryRows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
+      ...dataRows.map((row) => row.map((cell) => `"${cell}"`).join(",")),
+      webLink ? ["", "", "", "", ""] : [],
+      webLink ? ["Web Link", webLink, "", "", ""] : [],
+    ]
+      .filter((row) => row.length > 0)
+      .join("\n");
 
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
-    link.setAttribute("download", `event-list-${Date.now()}.csv`);
+    link.setAttribute("download", `budget-${Date.now()}.csv`);
     link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
@@ -80,7 +87,7 @@ export function ExportSheet({
       <html>
       <head>
         <meta charset="utf-8">
-        <title>Event List</title>
+        <title>Budget Report</title>
         <style>
           body { 
             font-family: Arial, sans-serif; 
@@ -92,28 +99,54 @@ export function ExportSheet({
             margin-bottom: 30px;
             font-size: 32px;
           }
-          .event { 
+          .summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+          }
+          .summary-card {
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 8px;
+          }
+          .summary-card h3 {
+            font-size: 14px;
+            color: #666;
+            margin: 0 0 10px 0;
+          }
+          .summary-card p {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0;
+            color: #000;
+          }
+          .budget-item { 
             margin-bottom: 30px; 
             padding: 20px;
             border: 1px solid #e0e0e0;
             border-radius: 8px;
             page-break-inside: avoid;
           }
-          .event h2 { 
+          .budget-item h2 { 
             color: #E91E63; 
             margin-top: 0;
-            font-size: 24px;
-            margin-bottom: 15px;
+            font-size: 20px;
+            margin-bottom: 10px;
           }
-          .event-detail { 
+          .budget-item p {
+            color: #666;
+            margin: 5px 0;
+          }
+          .budget-detail { 
             margin: 10px 0;
             display: flex;
           }
-          .event-detail strong { 
+          .budget-detail strong { 
             min-width: 120px;
             color: #000;
           }
-          .event-detail span {
+          .budget-detail span {
             color: #666;
           }
           ${
@@ -124,27 +157,47 @@ export function ExportSheet({
         </style>
       </head>
       <body>
-        <h1>Event List</h1>
-        ${events
+        <h1>Budget</h1>
+        <p style="color: #666; margin-bottom: 30px;">A simple and intuitive budget tracker</p>
+        
+        <div class="summary">
+          <div class="summary-card">
+            <h3>Event Budget</h3>
+            <p>$${eventBudget}</p>
+          </div>
+          <div class="summary-card">
+            <h3>Estimated cost</h3>
+            <p>$${totalEstimated}</p>
+          </div>
+          <div class="summary-card">
+            <h3>Actual cost</h3>
+            <p>$${totalActual}</p>
+          </div>
+          <div class="summary-card">
+            <h3>Paid</h3>
+            <p>$${totalPaid}</p>
+          </div>
+        </div>
+
+        <h2 style="font-size: 24px; margin-bottom: 20px;">Categories</h2>
+        
+        ${budgetItems
           .map(
-            (event) => `
-          <div class="event">
-            <h2>${event.name}</h2>
-            <div class="event-detail">
-              <strong>Date:</strong>
-              <span>${event.date}</span>
+            (item) => `
+          <div class="budget-item">
+            <h2>${item.category}</h2>
+            <p style="margin-bottom: 15px;">${item.vendorName}</p>
+            <div class="budget-detail">
+              <strong>Estimated:</strong>
+              <span>$${item.estimated}</span>
             </div>
-            <div class="event-detail">
-              <strong>Time:</strong>
-              <span>${event.startTime} - ${event.endTime}</span>
+            <div class="budget-detail">
+              <strong>Actual:</strong>
+              <span>$${item.actual}</span>
             </div>
-            <div class="event-detail">
-              <strong>Location:</strong>
-              <span>${event.location}</span>
-            </div>
-            <div class="event-detail">
-              <strong>Type:</strong>
-              <span>${event.description}</span>
+            <div class="budget-detail">
+              <strong>Paid:</strong>
+              <span>$${item.paid}</span>
             </div>
           </div>
         `
@@ -177,7 +230,7 @@ export function ExportSheet({
       <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
       <head>
         <meta charset='utf-8'>
-        <title>Event List</title>
+        <title>Budget Report</title>
         <style>
           body { 
             font-family: Arial, sans-serif; 
@@ -187,42 +240,66 @@ export function ExportSheet({
             color: #E91E63; 
             margin-bottom: 30px;
           }
-          .event { 
+          .summary {
+            margin-bottom: 40px;
+          }
+          .summary-item {
+            margin: 10px 0;
+          }
+          .budget-item { 
             margin-bottom: 30px; 
             padding: 20px;
             border: 1px solid #e0e0e0;
           }
-          .event h2 { 
+          .budget-item h2 { 
             color: #E91E63; 
             margin-top: 0;
           }
-          .event-detail { 
+          .budget-detail { 
             margin: 10px 0;
           }
-          .event-detail strong { 
+          .budget-detail strong { 
             min-width: 120px;
             display: inline-block;
           }
         </style>
       </head>
       <body>
-        <h1>Event List</h1>
-        ${events
+        <h1>Budget</h1>
+        <p>A simple and intuitive budget tracker</p>
+        
+        <div class="summary">
+          <h2>Summary</h2>
+          <div class="summary-item">
+            <strong>Event Budget:</strong> $${eventBudget}
+          </div>
+          <div class="summary-item">
+            <strong>Estimated cost:</strong> $${totalEstimated}
+          </div>
+          <div class="summary-item">
+            <strong>Actual cost:</strong> $${totalActual}
+          </div>
+          <div class="summary-item">
+            <strong>Paid:</strong> $${totalPaid}
+          </div>
+        </div>
+
+        <h2>Categories</h2>
+        
+        ${budgetItems
           .map(
-            (event) => `
-          <div class="event">
-            <h2>${event.name}</h2>
-            <div class="event-detail">
-              <strong>Date:</strong> ${event.date}
+            (item) => `
+          <div class="budget-item">
+            <h2>${item.category}</h2>
+            <p>${item.vendorName}</p>
+            <div class="budget-detail">
+              <strong>Estimated:</strong> $${item.estimated}
             </div>
-            <div class="event-detail">
-              <strong>Time:</strong> ${event.startTime} - ${event.endTime}
+            <div class="budget-detail">
+              <strong>Actual:</strong> $${item.actual}
             </div>
-            <div class="event-detail">
-              <strong>Location:</strong> ${event.location}
-            </div>
-            <div class="event-detail">
-              <strong>Type:</strong> ${event.description}
+            <div class="budget-detail">
+              <strong>Paid:</strong> $${item.paid}
             </div>
           </div>
         `
@@ -244,7 +321,7 @@ export function ExportSheet({
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `event-list-${Date.now()}.doc`;
+    link.download = `budget-${Date.now()}.doc`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -256,7 +333,7 @@ export function ExportSheet({
       setErrors({ format: true });
       setTouched({ format: true });
       toast.error("Please select a format", {
-        description: "Choose PDF, CSV, or DOC to export your event list.",
+        description: "Choose PDF, CSV, or DOC to export your budget.",
       });
       return;
     }
@@ -277,7 +354,9 @@ export function ExportSheet({
           return;
       }
 
-      onExport(selectedFormat, webLink);
+      toast.success(`Exporting as ${selectedFormat}`, {
+        description: "Your budget is being prepared for download.",
+      });
 
       setSelectedFormat("");
       setWebLink("");
@@ -287,7 +366,7 @@ export function ExportSheet({
     } catch (error) {
       toast.error("Export failed", {
         description:
-          "There was an error exporting your event list. Please try again.",
+          "There was an error exporting your budget. Please try again.",
       });
     }
   };
@@ -309,18 +388,17 @@ export function ExportSheet({
           </div>
         </SheetHeader>
 
-        <div className="bg-white p-5 min-h-fit md:min-h-screen space-y-6">
+        <div className="bg-white p-6 min-h-fit md:min-h-screen space-y-6">
           <div className="text-black">
             <p className="text-sm font-medium mb-4">
               Export Event list as <span className="text-red-500">*</span>
             </p>
 
-            {/* PDF Option */}
             <label
               className={`flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-colors mb-3 text-black border ${
                 touched.format && errors.format
                   ? "border-red-500 bg-red-50"
-                  : "bg-white/10 hover:bg-white/20 border-transparent"
+                  : "bg-white hover:bg-gray-50 border-gray-200"
               }`}
             >
               <input
@@ -329,17 +407,16 @@ export function ExportSheet({
                 value="PDF"
                 checked={selectedFormat === "PDF"}
                 onChange={(e) => handleFormatChange(e.target.value)}
-                className="w-5 h-5"
+                className="w-5 h-5 accent-primary"
               />
               <span className="font-medium">PDF</span>
             </label>
 
-            {/* CSV Option */}
             <label
               className={`flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-colors mb-3 text-black border ${
                 touched.format && errors.format
                   ? "border-red-500 bg-red-50"
-                  : "bg-white/10 hover:bg-white/20 border-transparent"
+                  : "bg-white hover:bg-gray-50 border-gray-200"
               }`}
             >
               <input
@@ -348,17 +425,16 @@ export function ExportSheet({
                 value="CSV"
                 checked={selectedFormat === "CSV"}
                 onChange={(e) => handleFormatChange(e.target.value)}
-                className="w-5 h-5"
+                className="w-5 h-5 accent-primary"
               />
               <span className="font-medium">CSV</span>
             </label>
 
-            {/* DOC Option */}
             <label
               className={`flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-colors mb-3 text-black border ${
                 touched.format && errors.format
                   ? "border-red-500 bg-red-50"
-                  : "bg-white/10 hover:bg-white/20 border-transparent"
+                  : "bg-white hover:bg-gray-50 border-gray-200"
               }`}
             >
               <input
@@ -367,7 +443,7 @@ export function ExportSheet({
                 value="DOC"
                 checked={selectedFormat === "DOC"}
                 onChange={(e) => handleFormatChange(e.target.value)}
-                className="w-5 h-5"
+                className="w-5 h-5 accent-primary"
               />
               <span className="font-medium">DOC</span>
             </label>
@@ -379,7 +455,6 @@ export function ExportSheet({
             )}
           </div>
 
-          {/* Web Link */}
           <div>
             <label className="block text-sm font-medium mb-2 text-black">
               Web link:
@@ -388,17 +463,16 @@ export function ExportSheet({
               type="text"
               value={webLink}
               onChange={(e) => setWebLink(e.target.value)}
-              className="w-full px-4 py-2 rounded-lg bg-white text-gray-900 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-pink-300"
+              className="w-full px-4 py-3 rounded-lg bg-white text-gray-900 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50"
               placeholder="Enter web link (optional)"
             />
           </div>
 
-          {/* Done Button */}
-          <div className="flex justify-end">
+          <div className="flex justify-end pt-4">
             <Button
               size="lg"
               onClick={handleExport}
-              className="bg-primary text-white font-semibold hover:bg-primary/80 transition-colors cursor-pointer"
+              className="bg-primary text-white hover:bg-primary/90"
             >
               Done
             </Button>

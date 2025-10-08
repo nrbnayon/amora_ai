@@ -311,7 +311,7 @@ export function VendorExportSheet({
           </div>
         </SheetHeader>
 
-        <div className="bg-white p-5 min-h-fit space-y-6">
+        <div className="bg-white p-5 min-h-fit md:min-h-screen space-y-6">
           <div className="text-black">
             <p className="text-sm font-medium mb-4">
               Export Vendor list as <span className="text-red-500">*</span>

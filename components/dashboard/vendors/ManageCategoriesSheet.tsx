@@ -57,7 +57,7 @@ export function ManageCategoriesSheet({
           </div>
         </SheetHeader>
 
-        <div className="bg-white p-6 min-h-fit space-y-6">
+        <div className="bg-white p-6 min-h-fit md:min-h-screen space-y-6">
           <p className="text-sm text-gray-600 mb-4">
             Selected categories will have vendor recommendations.
           </p>
