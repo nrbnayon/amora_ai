@@ -73,7 +73,7 @@ export default function SettingsPage() {
           <Avatar className="text-center w-40 h-40 rounded-full border mx-auto mb-4">
             <AvatarImage src="/user.png" alt="User Avatar" />
             <AvatarFallback className="bg-gray-200 text-gray-500">
-              JD
+              Nayon
             </AvatarFallback>
           </Avatar>
         </div>
