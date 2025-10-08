@@ -1,5 +1,4 @@
-// components/event-list/ExportSheet.tsx
-"use client";
+// components/vendors/VendorExportSheet.tsx
 import React, { useState } from "react";
 import {
   Sheet,
@@ -9,30 +8,24 @@ import {
 } from "@/components/ui/sheet";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Event } from "./EventListPage";
+import { Vendor } from "./VendorsPage";
 import { toast } from "sonner";
 
-interface ExportSheetProps {
+interface VendorExportSheetProps {
   isOpen: boolean;
   onClose: () => void;
-  onExport: (format: string, webLink?: string) => void;
-  events: Event[];
+  vendors: Vendor[];
 }
 
-export function ExportSheet({
+export function VendorExportSheet({
   isOpen,
   onClose,
-  onExport,
-  events,
-}: ExportSheetProps) {
+  vendors,
+}: VendorExportSheetProps) {
   const [selectedFormat, setSelectedFormat] = useState<string>("");
   const [webLink, setWebLink] = useState<string>("");
-  const [errors, setErrors] = useState({
-    format: false,
-  });
-  const [touched, setTouched] = useState({
-    format: false,
-  });
+  const [errors, setErrors] = useState({ format: false });
+  const [touched, setTouched] = useState({ format: false });
 
   const handleFormatChange = (format: string) => {
     setSelectedFormat(format);
@@ -42,20 +35,20 @@ export function ExportSheet({
 
   const generateCSV = () => {
     const headers = [
-      "Event Name",
-      "Date",
-      "Start Time",
-      "End Time",
+      "Vendor Name",
+      "Category",
+      "Contact",
       "Location",
-      "Description",
+      "Email",
+      "Website",
     ];
-    const rows = events.map((event) => [
-      event.name,
-      event.date,
-      event.startTime,
-      event.endTime,
-      event.location,
-      event.description,
+    const rows = vendors.map((vendor) => [
+      vendor.name,
+      vendor.category,
+      vendor.phone,
+      vendor.location,
+      vendor.email,
+      vendor.website,
     ]);
 
     const csvContent = [
@@ -67,7 +60,7 @@ export function ExportSheet({
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
-    link.setAttribute("download", `event-list-${Date.now()}.csv`);
+    link.setAttribute("download", `vendors-list-${Date.now()}.csv`);
     link.style.visibility = "hidden";
     document.body.appendChild(link);
     link.click();
@@ -80,7 +73,7 @@ export function ExportSheet({
       <html>
       <head>
         <meta charset="utf-8">
-        <title>Event List</title>
+        <title>Vendors List</title>
         <style>
           body { 
             font-family: Arial, sans-serif; 
@@ -92,28 +85,28 @@ export function ExportSheet({
             margin-bottom: 30px;
             font-size: 32px;
           }
-          .event { 
+          .vendor { 
             margin-bottom: 30px; 
             padding: 20px;
             border: 1px solid #e0e0e0;
             border-radius: 8px;
             page-break-inside: avoid;
           }
-          .event h2 { 
+          .vendor h2 { 
             color: #E91E63; 
             margin-top: 0;
             font-size: 24px;
             margin-bottom: 15px;
           }
-          .event-detail { 
+          .vendor-detail { 
             margin: 10px 0;
             display: flex;
           }
-          .event-detail strong { 
+          .vendor-detail strong { 
             min-width: 120px;
             color: #000;
           }
-          .event-detail span {
+          .vendor-detail span {
             color: #666;
           }
           ${
@@ -124,27 +117,31 @@ export function ExportSheet({
         </style>
       </head>
       <body>
-        <h1>Event List</h1>
-        ${events
+        <h1>Vendors List</h1>
+        ${vendors
           .map(
-            (event) => `
-          <div class="event">
-            <h2>${event.name}</h2>
-            <div class="event-detail">
-              <strong>Date:</strong>
-              <span>${event.date}</span>
+            (vendor) => `
+          <div class="vendor">
+            <h2>${vendor.name}</h2>
+            <div class="vendor-detail">
+              <strong>Category:</strong>
+              <span>${vendor.category}</span>
             </div>
-            <div class="event-detail">
-              <strong>Time:</strong>
-              <span>${event.startTime} - ${event.endTime}</span>
-            </div>
-            <div class="event-detail">
+            <div class="vendor-detail">
               <strong>Location:</strong>
-              <span>${event.location}</span>
+              <span>${vendor.location}</span>
             </div>
-            <div class="event-detail">
-              <strong>Type:</strong>
-              <span>${event.description}</span>
+            <div class="vendor-detail">
+              <strong>Contact:</strong>
+              <span>${vendor.phone}</span>
+            </div>
+            <div class="vendor-detail">
+              <strong>Email:</strong>
+              <span>${vendor.email}</span>
+            </div>
+            <div class="vendor-detail">
+              <strong>Website:</strong>
+              <span>${vendor.website}</span>
             </div>
           </div>
         `
@@ -177,7 +174,7 @@ export function ExportSheet({
       <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
       <head>
         <meta charset='utf-8'>
-        <title>Event List</title>
+        <title>Vendors List</title>
         <style>
           body { 
             font-family: Arial, sans-serif; 
@@ -187,42 +184,45 @@ export function ExportSheet({
             color: #E91E63; 
             margin-bottom: 30px;
           }
-          .event { 
+          .vendor { 
             margin-bottom: 30px; 
             padding: 20px;
             border: 1px solid #e0e0e0;
           }
-          .event h2 { 
+          .vendor h2 { 
             color: #E91E63; 
             margin-top: 0;
           }
-          .event-detail { 
+          .vendor-detail { 
             margin: 10px 0;
           }
-          .event-detail strong { 
+          .vendor-detail strong { 
             min-width: 120px;
             display: inline-block;
           }
         </style>
       </head>
       <body>
-        <h1>Event List</h1>
-        ${events
+        <h1>Vendors List</h1>
+        ${vendors
           .map(
-            (event) => `
-          <div class="event">
-            <h2>${event.name}</h2>
-            <div class="event-detail">
-              <strong>Date:</strong> ${event.date}
+            (vendor) => `
+          <div class="vendor">
+            <h2>${vendor.name}</h2>
+            <div class="vendor-detail">
+              <strong>Category:</strong> ${vendor.category}
             </div>
-            <div class="event-detail">
-              <strong>Time:</strong> ${event.startTime} - ${event.endTime}
+            <div class="vendor-detail">
+              <strong>Location:</strong> ${vendor.location}
             </div>
-            <div class="event-detail">
-              <strong>Location:</strong> ${event.location}
+            <div class="vendor-detail">
+              <strong>Contact:</strong> ${vendor.phone}
             </div>
-            <div class="event-detail">
-              <strong>Type:</strong> ${event.description}
+            <div class="vendor-detail">
+              <strong>Email:</strong> ${vendor.email}
+            </div>
+            <div class="vendor-detail">
+              <strong>Website:</strong> ${vendor.website}
             </div>
           </div>
         `
@@ -244,7 +244,7 @@ export function ExportSheet({
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `event-list-${Date.now()}.doc`;
+    link.download = `vendors-list-${Date.now()}.doc`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -256,7 +256,7 @@ export function ExportSheet({
       setErrors({ format: true });
       setTouched({ format: true });
       toast.error("Please select a format", {
-        description: "Choose PDF, CSV, or DOC to export your event list.",
+        description: "Choose PDF, CSV, or DOC to export your vendors list.",
       });
       return;
     }
@@ -277,7 +277,9 @@ export function ExportSheet({
           return;
       }
 
-      onExport(selectedFormat, webLink);
+      toast.success(`Exporting as ${selectedFormat}`, {
+        description: "Your vendors list is being prepared for download.",
+      });
 
       setSelectedFormat("");
       setWebLink("");
@@ -287,7 +289,7 @@ export function ExportSheet({
     } catch (error) {
       toast.error("Export failed", {
         description:
-          "There was an error exporting your event list. Please try again.",
+          "There was an error exporting your vendors list. Please try again.",
       });
     }
   };
@@ -312,10 +314,9 @@ export function ExportSheet({
         <div className="bg-white p-5 min-h-fit space-y-6">
           <div className="text-black">
             <p className="text-sm font-medium mb-4">
-              Export Event list as <span className="text-red-500">*</span>
+              Export Vendor list as <span className="text-red-500">*</span>
             </p>
 
-            {/* PDF Option */}
             <label
               className={`flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-colors mb-3 text-black border ${
                 touched.format && errors.format
@@ -334,7 +335,6 @@ export function ExportSheet({
               <span className="font-medium">PDF</span>
             </label>
 
-            {/* CSV Option */}
             <label
               className={`flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-colors mb-3 text-black border ${
                 touched.format && errors.format
@@ -353,7 +353,6 @@ export function ExportSheet({
               <span className="font-medium">CSV</span>
             </label>
 
-            {/* DOC Option */}
             <label
               className={`flex items-center gap-3 p-4 rounded-lg cursor-pointer transition-colors mb-3 text-black border ${
                 touched.format && errors.format
@@ -379,7 +378,6 @@ export function ExportSheet({
             )}
           </div>
 
-          {/* Web Link */}
           <div>
             <label className="block text-sm font-medium mb-2 text-black">
               Web link:
@@ -393,7 +391,6 @@ export function ExportSheet({
             />
           </div>
 
-          {/* Done Button */}
           <div className="flex justify-end">
             <Button
               size="lg"
