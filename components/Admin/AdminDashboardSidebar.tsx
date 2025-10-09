@@ -162,7 +162,7 @@ export default function AdminDashboardSidebar() {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setIsMobileMenuOpen(true)}
-        className='lg:hidden fixed top-4 left-4 z-40 bg-white border border-gray-200 rounded-lg p-2 hover:bg-gray-50 shadow-md'
+        className='lg:hidden fixed top-4 left-4 z-40 bg-white border border-gray-200 rounded-sm p-2 hover:bg-gray-50 shadow-md'
         aria-label='Open menu'
       >
         <Menu className='w-6 h-6 text-gray-600' />
@@ -196,7 +196,7 @@ export default function AdminDashboardSidebar() {
               {open ? (
                 <h1 className='text-2xl font-bold text-primary'>Amora AI</h1>
               ) : (
-                <div className='w-8 h-8 bg-primary rounded-lg flex items-center justify-center'>
+                <div className='w-8 h-8 bg-primary rounded-sm flex items-center justify-center'>
                   <span className='text-white font-bold text-sm'>A</span>
                 </div>
               )}
@@ -214,7 +214,7 @@ export default function AdminDashboardSidebar() {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative",
+                    "flex items-center gap-3 px-4 py-3 rounded-sm transition-all duration-200 group relative",
                     isActive
                       ? "bg-primary text-white shadow-lg shadow-primary/20"
                       : "text-gray-700 hover:bg-gray-50"
@@ -240,7 +240,7 @@ export default function AdminDashboardSidebar() {
 
                   {/* Tooltip for collapsed state */}
                   {!open && (
-                    <div className='absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-lg opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50'>
+                    <div className='absolute left-full ml-2 px-3 py-2 bg-gray-900 text-white text-sm rounded-sm opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap z-50'>
                       {item.name}
                     </div>
                   )}
@@ -307,7 +307,7 @@ export default function AdminDashboardSidebar() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200",
+                  "flex items-center gap-3 px-4 py-3 rounded-sm transition-all duration-200",
                   isActive
                     ? "bg-primary text-white shadow-lg shadow-primary/20"
                     : "text-gray-700 hover:bg-gray-50"

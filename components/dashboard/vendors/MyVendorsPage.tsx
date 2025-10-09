@@ -1,9 +1,9 @@
 // components/vendors/MyVendorsPage.tsx
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Vendor } from "./VendorsPage";
 import { VendorExportSheet } from "./VendorExportSheet";
 import { ChevronLeft, ChevronRight, SquareArrowOutUpRight } from "lucide-react";
+import { Vendor } from "@/lib/types";
 
 interface MyVendorsPageProps {
   vendors: Vendor[];

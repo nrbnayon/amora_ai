@@ -1,6 +1,6 @@
 // components/common/StatCard.tsx
 import React from "react";
-import { LucideIcon } from "lucide-react";
+import { LucideIcon, TrendingUp, TrendingDown } from "lucide-react";
 
 interface StatCardProps {
   title: string;
@@ -24,31 +24,36 @@ export function StatCard({
   iconColor,
 }: StatCardProps) {
   return (
-    <div className='bg-white rounded-2xl shadow-sm p-6 border border-gray-100'>
-      <div className='flex items-start justify-between mb-4'>
+    <div className="bg-white rounded-2xl shadow-[4px_4px_54px_0px_#0000000D] p-6 hover:shadow-lg transition-shadow">
+      <div className="flex items-start justify-between mb-4">
         <div>
-          <p className='text-sm text-gray-600 mb-1'>{title}</p>
-          <h3 className='text-2xl md:text-3xl font-bold text-gray-900'>
+          <p className="text-sm text-gray-600 mb-1">{title}</p>
+          <h3 className="text-xl md:text-2xl font-bold text-gray-900">
             {value}
           </h3>
         </div>
         <div
           className={`w-12 h-12 rounded-xl flex items-center justify-center ${iconBgColor}`}
         >
-          <Icon className={`w-6 h-6 ${iconColor}`} />
+          <Icon className={`w-5 h-5 ${iconColor}`} />
         </div>
       </div>
 
       {trend && (
-        <div className='flex items-center gap-1'>
+        <div className="flex items-center gap-1">
           <span
-            className={`text-sm font-medium ${
-              trend.isPositive ? "text-green-600" : "text-red-600"
+            className={`text-sm font-medium flex items-center gap-1 ${
+              trend.isPositive ? "text-green-600" : "text-primary"
             }`}
           >
-            {trend.isPositive ? "↑" : "↓"} {trend.value}
+            {trend.isPositive ? (
+              <TrendingUp size={16} />
+            ) : (
+              <TrendingDown size={16} />
+            )}{" "}
+            {trend.value}
           </span>
-          <span className='text-xs text-gray-500'>{trend.text}</span>
+          <span className="text-xs text-gray-500">{trend.text}</span>
         </div>
       )}
     </div>

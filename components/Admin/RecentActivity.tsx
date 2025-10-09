@@ -1,6 +1,7 @@
 // components/admin/RecentActivity.tsx
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Image from "next/image";
 
 interface Activity {
   id: string;
@@ -16,49 +17,49 @@ const activities: Activity[] = [
     name: "Sarah Johnson",
     action: "Created a new wedding plan.",
     time: "2 hours ago",
-    avatar: "/avatar1.jpg",
+    avatar: "/user.png",
   },
   {
     id: "2",
     name: "Michael Brown",
     action: "Made a payment of $2500.",
     time: "Tuesday 2:00 PM",
-    avatar: "/avatar2.jpg",
+    avatar: "/user.png",
   },
   {
     id: "3",
     name: "Sarah Johnson",
     action: "Created a new wedding plan.",
     time: "2 hours ago",
-    avatar: "/avatar1.jpg",
+    avatar: "/user.png",
   },
   {
     id: "4",
     name: "Michael Brown",
     action: "Made a payment of $2500.",
     time: "Tuesday 2:00 PM",
-    avatar: "/avatar2.jpg",
+    avatar: "/user.png",
   },
   {
     id: "5",
     name: "Sarah Johnson",
     action: "Created a new wedding plan.",
     time: "2 hours ago",
-    avatar: "/avatar1.jpg",
+    avatar: "/user.png",
   },
   {
     id: "6",
     name: "Michael Brown",
     action: "Made a payment of $2500.",
     time: "Tuesday 2:00 PM",
-    avatar: "/avatar2.jpg",
+    avatar: "/user.png",
   },
   {
     id: "7",
     name: "Sarah Johnson",
     action: "Created a new wedding plan.",
     time: "2 hours ago",
-    avatar: "/avatar1.jpg",
+    avatar: "/user.png",
   },
 ];
 
@@ -153,26 +154,33 @@ export function RecentActivity() {
   };
 
   return (
-    <div className='bg-white rounded-2xl shadow-sm p-6 border border-gray-100'>
-      <h3 className='text-lg font-semibold text-gray-900 mb-6'>
+    <div className="bg-white rounded-2xl shadow-[4px_4px_54px_0px_#0000000D] p-6 ">
+      <h3 className="text-lg font-semibold text-gray-900 mb-6">
         Recent Activity
       </h3>
 
-      <div className='space-y-4'>
+      <div className="space-y-4 ">
         {displayedActivities.map((activity) => (
-          <div key={activity.id} className='flex items-start gap-3'>
-            <div className='w-10 h-10 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center'>
-              <span className='text-sm font-medium text-gray-600'>
-                {activity.name.charAt(0)}
-              </span>
+          <div
+            key={activity.id}
+            className="flex items-start gap-3 shadow-sm bg-white p-3 rounded-md border hover:shadow-lg transition-shadow hover:border-primary"
+          >
+            <div className="w-10 h-10 rounded-full border bg-gray-200 flex-shrink-0 flex items-center justify-center">
+              <Image
+                src={activity.avatar}
+                alt={activity.name.charAt(0)}
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
             </div>
-            <div className='flex-1'>
-              <p className='text-sm font-medium text-gray-900'>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-gray-900">
                 {activity.name}
               </p>
-              <p className='text-sm text-gray-600'>{activity.action}</p>
+              <p className="text-sm text-gray-600">{activity.action}</p>
             </div>
-            <span className='text-xs text-gray-500 whitespace-nowrap'>
+            <span className="text-xs text-gray-500 whitespace-nowrap">
               {activity.time}
             </span>
           </div>
@@ -180,13 +188,13 @@ export function RecentActivity() {
       </div>
 
       {totalPages > 1 && (
-        <div className='flex items-center justify-center gap-2 mt-6'>
+        <div className="flex items-center justify-center gap-2 mt-6">
           <button
             onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
             disabled={currentPage === 1}
-            className='w-8 h-8 rounded border border-gray-300 bg-white flex items-center justify-center hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed'
+            className="w-8 h-8 rounded border border-gray-300 bg-white flex items-center justify-center hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <ChevronLeft className='w-4 h-4' />
+            <ChevronLeft className="w-4 h-4" />
           </button>
 
           {renderPageNumbers()}
@@ -196,9 +204,9 @@ export function RecentActivity() {
               setCurrentPage(Math.min(totalPages, currentPage + 1))
             }
             disabled={currentPage === totalPages}
-            className='w-8 h-8 rounded border border-gray-300 bg-white flex items-center justify-center hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed'
+            className="w-8 h-8 rounded border border-gray-300 bg-white flex items-center justify-center hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            <ChevronRight className='w-4 h-4' />
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       )}

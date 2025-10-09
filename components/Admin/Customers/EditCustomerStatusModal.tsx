@@ -40,7 +40,7 @@ export function EditCustomerStatusModal({
   };
 
   return (
-    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4'>
+    <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/60  p-4'>
       <div className='bg-white rounded-2xl shadow-xl max-w-md w-full'>
         {/* Header */}
         <div className='flex items-center justify-between p-6 border-b'>
@@ -109,7 +109,7 @@ export function EditCustomerStatusModal({
           </div>
 
           {/* Plan Selection */}
-          <div>
+          {/* <div>
             <label className='block text-sm font-medium text-gray-900 mb-3'>
               Subscription Plan
             </label>
@@ -148,7 +148,7 @@ export function EditCustomerStatusModal({
                 </div>
               </label>
             </div>
-          </div>
+          </div> */}
 
           {/* Actions */}
           <div className='flex gap-3 pt-4'>

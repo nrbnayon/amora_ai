@@ -1,7 +1,7 @@
 // components/vendors/VendorCard.tsx
 import React from "react";
-import { Vendor } from "./VendorsPage";
 import { MapPinHouse, Plus } from "lucide-react";
+import { Vendor } from "@/lib/types";
 
 interface VendorCardProps {
   vendor: Vendor;
@@ -23,7 +23,7 @@ export function VendorCard({
     >
       <div className="relative h-48">
         <img
-          src={vendor.image}
+          src={Array.isArray(vendor.image) ? vendor.image[0] ?? "" : vendor.image ?? ""}
           alt={vendor.name}
           className="w-full h-full object-cover"
         />

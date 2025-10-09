@@ -6,23 +6,9 @@ import { ManageCategoriesSheet } from "./ManageCategoriesSheet";
 import { VendorDetailsSheet } from "./VendorDetailsSheet";
 import { MyVendorsPage } from "./MyVendorsPage";
 import { Button } from "@/components/ui/button";
+import { Vendor } from "@/lib/types";
 
-export interface Vendor {
-  id: string;
-  name: string;
-  category: string;
-  description: string;
-  location: string;
-  image: string;
-  rating: number;
-  reviews: number;
-  email: string;
-  phone: string;
-  website: string;
-  fullDescription: string;
-  images: string[];
-  status?: "Confirmed" | "Pending" | "Declined";
-}
+
 
 const baseVendors: Vendor[] = [
   {

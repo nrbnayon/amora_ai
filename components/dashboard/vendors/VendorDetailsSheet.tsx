@@ -1,4 +1,4 @@
-// components/vendors/VendorDetailsSheet.tsx
+// components/Admin/Vendors/VendorDetailsSheet.tsx
 import React, { useState } from "react";
 import {
   Sheet,
@@ -7,7 +7,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { X, Bookmark, MapPin, Mail, Phone, Globe } from "lucide-react";
-import { Vendor } from "./VendorsPage";
+import { Vendor } from "@/lib/types";
 
 interface VendorDetailsSheetProps {
   isOpen: boolean;
@@ -24,7 +24,9 @@ export function VendorDetailsSheet({
   isSaved,
   onToggleSave,
 }: VendorDetailsSheetProps) {
-  const [mainImage, setMainImage] = useState(vendor.images[0]);
+  const [mainImage, setMainImage] = useState(
+    vendor.images && vendor.images.length > 0 ? vendor.images[0] : ""
+  );
 
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
@@ -43,10 +45,10 @@ export function VendorDetailsSheet({
           </div>
         </SheetHeader>
 
-        <div className="bg-white p-6 min-h-fit md:min-h-screen">
+        <div className="bg-white p-6 min-h-fit ">
           {/* Image Gallery */}
           <div className="space-y-3 mb-6">
-            {vendor.images.length === 1 ? (
+            {vendor.images?.length === 1 ? (
               // ✅ Single image: show full width
               <div>
                 <img
@@ -70,7 +72,7 @@ export function VendorDetailsSheet({
 
                   {/* Right Side Vertical Images (2, 3, 4) */}
                   <div className="flex-1 flex flex-col gap-3">
-                    {vendor.images.slice(1, 4).map((image, index) => (
+                    {(vendor.images?.slice(1, 4) ?? []).map((image, index) => (
                       <div
                         key={index}
                         className="flex-1 cursor-pointer"
@@ -91,9 +93,9 @@ export function VendorDetailsSheet({
                 </div>
 
                 {/* Bottom Section: Additional Images (5+) */}
-                {vendor.images.length > 4 && (
+                {(vendor.images?.length ?? 0) > 4 && (
                   <div className="grid grid-cols-4 gap-3">
-                    {vendor.images.slice(4).map((image, index) => (
+                    {(vendor.images ?? []).slice(4).map((image, index) => (
                       <div
                         key={index + 4}
                         className="cursor-pointer"
@@ -119,9 +121,12 @@ export function VendorDetailsSheet({
           {/* Vendor Info */}
           <div className="space-y-4">
             <div className="flex items-start justify-between">
-              <h2 className="text-3xl font-semibold text-gray-900">
-                {vendor.name}
-              </h2>
+              <div>
+                <h2 className="text-3xl font-semibold text-gray-900">
+                  {vendor.name}
+                </h2>
+                <p className="text-sm text-gray-500 mt-1">{vendor.category}</p>
+              </div>
               <button
                 onClick={() => onToggleSave(vendor.id)}
                 className="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
@@ -139,34 +144,48 @@ export function VendorDetailsSheet({
               {vendor.fullDescription}
             </p>
 
+            {/* Guest Capacity */}
+            {vendor.guestCapacity && (
+              <div className="pt-2 pb-2 border-t border-b">
+                <p className="text-sm text-gray-600">
+                  <span className="font-semibold text-gray-900">
+                    Guest Capacity:
+                  </span>{" "}
+                  {vendor.guestCapacity}
+                </p>
+              </div>
+            )}
+
             {/* Contact Info */}
             <div className="space-y-3 pt-4 border-t">
               <div className="flex items-center gap-3 text-gray-700">
-                <MapPin className="w-5 h-5 text-primary" />
+                <MapPin className="w-5 h-5 text-primary flex-shrink-0" />
                 <span>{vendor.location}</span>
               </div>
 
               <div className="flex items-center gap-3 text-gray-700">
-                <Mail className="w-5 h-5 text-primary" />
+                <Mail className="w-5 h-5 text-primary flex-shrink-0" />
                 <span>{vendor.email}</span>
               </div>
 
               <div className="flex items-center gap-3 text-gray-700">
-                <Phone className="w-5 h-5 text-primary" />
+                <Phone className="w-5 h-5 text-primary flex-shrink-0" />
                 <span>{vendor.phone}</span>
               </div>
 
-              <div className="flex items-center gap-3 text-gray-700">
-                <Globe className="w-5 h-5 text-primary" />
-                <a
-                  href={vendor.website}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-primary hover:underline"
-                >
-                  {vendor.website}
-                </a>
-              </div>
+              {vendor.website && (
+                <div className="flex items-center gap-3 text-gray-700">
+                  <Globe className="w-5 h-5 text-primary flex-shrink-0" />
+                  <a
+                    href={vendor.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline break-all"
+                  >
+                    {vendor.website}
+                  </a>
+                </div>
+              )}
             </div>
           </div>
         </div>

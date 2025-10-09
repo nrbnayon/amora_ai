@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/sheet";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Vendor } from "./VendorsPage";
 import { toast } from "sonner";
+import { Vendor } from "@/lib/types";
 
 interface VendorExportSheetProps {
   isOpen: boolean;

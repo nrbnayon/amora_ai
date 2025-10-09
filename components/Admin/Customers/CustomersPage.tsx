@@ -10,10 +10,10 @@ import {
   Calendar,
   Edit,
 } from "lucide-react";
-import { DeleteCustomerModal } from "./DeleteCustomerModal";
 import { CustomerDetailsModal } from "./CustomerDetailsModal";
 import { EditCustomerStatusModal } from "./EditCustomerStatusModal";
 import { toast } from "sonner";
+import { DeleteModal } from "@/components/common/DeleteModal";
 
 interface Customer {
   id: string;
@@ -154,7 +154,7 @@ export default function CustomersPage() {
     null
   );
 
-  const itemsPerPage = 14;
+  const itemsPerPage = 10;
   const totalPages = Math.ceil(customers.length / itemsPerPage);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -272,53 +272,53 @@ export default function CustomersPage() {
   };
 
   return (
-    <div className='w-full mx-auto px-4 sm:px-6 lg:px-8 py-6'>
-      <PageHeader title='Customers' />
+    <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <PageHeader title="Customers" />
 
-      <div className='bg-white rounded-2xl shadow-sm border border-gray-100 p-6'>
+      <div className="bg-white rounded-2xl shadow-[4px_4px_54px_0px_#0000000D]  p-6">
         {/* Header */}
-        <div className='flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4'>
-          <h2 className='text-xl font-semibold text-gray-900'>
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
+          <h2 className="text-xl font-semibold text-gray-900">
             Customer Details
           </h2>
 
-          <div className='flex items-center gap-2 bg-gray-50 rounded-lg p-1'>
-            <Calendar className='w-4 h-4 text-gray-600' />
+          <div className="flex items-center gap-2 bg-gray-50 rounded-sm p-2 md:px-4 md:py-2">
+            <Calendar className="w-4 h-4 text-gray-600" />
             <select
               value={filter}
               onChange={(e) =>
                 setFilter(e.target.value as "Monthly" | "Weekly" | "Yearly")
               }
-              className='bg-transparent border-none text-sm font-medium focus:outline-none cursor-pointer'
+              className="bg-transparent border-none text-sm font-medium focus:outline-none cursor-pointer"
             >
-              <option value='Monthly'>Monthly</option>
-              <option value='Weekly'>Weekly</option>
-              <option value='Yearly'>Yearly</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Weekly">Weekly</option>
+              <option value="Yearly">Yearly</option>
             </select>
           </div>
         </div>
 
         {/* Table */}
-        <div className='overflow-x-auto'>
-          <table className='w-full'>
-            <thead className='bg-gray-50 border-b'>
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b">
               <tr>
-                <th className='text-left py-4 px-6 font-semibold text-gray-900'>
+                <th className="text-left py-4 px-6 font-semibold text-gray-900">
                   Couple Name
                 </th>
-                <th className='text-left py-4 px-6 font-semibold text-gray-900'>
+                <th className="text-left py-4 px-6 font-semibold text-gray-900">
                   Email
                 </th>
-                <th className='text-left py-4 px-6 font-semibold text-gray-900'>
+                <th className="text-center py-4 px-6 font-semibold text-gray-900">
                   Event Date
                 </th>
-                <th className='text-left py-4 px-6 font-semibold text-gray-900'>
+                <th className="text-center py-4 px-6 font-semibold text-gray-900">
                   Plan
                 </th>
-                <th className='text-left py-4 px-6 font-semibold text-gray-900'>
+                <th className="text-center py-4 px-6 font-semibold text-gray-900">
                   Status
                 </th>
-                <th className='text-left py-4 px-6 font-semibold text-gray-900'>
+                <th className="text-center py-4 px-6 font-semibold text-gray-900">
                   Actions
                 </th>
               </tr>
@@ -327,47 +327,49 @@ export default function CustomersPage() {
               {displayedCustomers.map((customer) => (
                 <tr
                   key={customer.id}
-                  className='border-b last:border-b-0 hover:bg-gray-50 transition-colors'
+                  className="border-b last:border-b-0 hover:bg-gray-50 transition-colors"
                 >
-                  <td className='py-4 px-6 text-gray-900'>
+                  <td className="py-4 px-6 text-gray-900">
                     {customer.coupleName}
                   </td>
-                  <td className='py-4 px-6 text-gray-600'>{customer.email}</td>
-                  <td className='py-4 px-6 text-gray-600'>
+                  <td className="py-4 px-6 text-gray-600">{customer.email}</td>
+                  <td className="py-4 px-6 text-center text-gray-600">
                     {customer.eventDate}
                   </td>
-                  <td className='py-4 px-6 text-gray-600'>{customer.plan}</td>
-                  <td className='py-4 px-6'>
+                  <td className="py-4 px-6 text-center text-gray-600">
+                    {customer.plan}
+                  </td>
+                  <td className="py-4 px-6 text-center">
                     <span
-                      className={`inline-block px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(
+                      className={`inline-block px-3 py-1 rounded-sm text-sm font-medium ${getStatusColor(
                         customer.status
                       )}`}
                     >
                       {customer.status}
                     </span>
                   </td>
-                  <td className='py-4 px-6'>
-                    <div className='flex items-center gap-2'>
+                  <td className="py-4 px-6 ">
+                    <div className="flex justify-center items-center gap-2">
                       <button
                         onClick={() => handleViewDetails(customer)}
-                        className='p-2 hover:bg-gray-100 rounded-lg transition-colors'
-                        title='View Details'
+                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                        title="View Details"
                       >
-                        <Eye className='w-5 h-5 text-purple-600' />
+                        <Eye className="w-5 h-5 text-purple-600" />
                       </button>
                       <button
                         onClick={() => handleEditStatus(customer)}
-                        className='p-2 hover:bg-gray-100 rounded-lg transition-colors'
-                        title='Edit Status'
+                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                        title="Edit Status"
                       >
-                        <Edit className='w-5 h-5 text-blue-600' />
+                        <Edit className="w-5 h-5 text-blue-600" />
                       </button>
                       <button
                         onClick={() => handleDeleteClick(customer)}
-                        className='p-2 hover:bg-gray-100 rounded-lg transition-colors'
-                        title='Delete Customer'
+                        className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                        title="Delete Customer"
                       >
-                        <Trash2 className='w-5 h-5 text-red-600' />
+                        <Trash2 className="w-5 h-5 text-red-600" />
                       </button>
                     </div>
                   </td>
@@ -379,13 +381,13 @@ export default function CustomersPage() {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className='flex items-center justify-center gap-2 mt-6'>
+          <div className="flex items-center justify-center gap-2 mt-6">
             <button
               onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
               disabled={currentPage === 1}
-              className='w-8 h-8 rounded border border-gray-300 bg-white flex items-center justify-center hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed'
+              className="w-8 h-8 rounded border border-gray-300 bg-white flex items-center justify-center hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <ChevronLeft className='w-4 h-4' />
+              <ChevronLeft className="w-4 h-4" />
             </button>
 
             {renderPageNumbers()}
@@ -395,9 +397,9 @@ export default function CustomersPage() {
                 setCurrentPage(Math.min(totalPages, currentPage + 1))
               }
               disabled={currentPage === totalPages}
-              className='w-8 h-8 rounded border border-gray-300 bg-white flex items-center justify-center hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed'
+              className="w-8 h-8 rounded border border-gray-300 bg-white flex items-center justify-center hover:border-primary disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <ChevronRight className='w-4 h-4' />
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         )}
@@ -406,13 +408,14 @@ export default function CustomersPage() {
       {/* Modals */}
       {selectedCustomer && (
         <>
-          <DeleteCustomerModal
+          <DeleteModal
+            title="Delete Customer"
             isOpen={isDeleteModalOpen}
             onClose={() => {
               setIsDeleteModalOpen(false);
               setSelectedCustomer(null);
             }}
-            customerName={selectedCustomer.coupleName}
+            deleteName={selectedCustomer.coupleName}
             onConfirm={handleDeleteConfirm}
           />
 

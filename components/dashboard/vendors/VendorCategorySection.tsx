@@ -1,8 +1,8 @@
 // components/vendors/VendorCategorySection.tsx
 import React, { useState } from "react";
-import { Vendor } from "./VendorsPage";
 import { VendorCard } from "./VendorCard";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Vendor } from "@/lib/types";
 
 interface VendorCategorySectionProps {
   category: string;

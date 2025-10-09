@@ -22,7 +22,7 @@ export function PageHeader({
           {title}
         </h1>
         {subtitle && (
-          <p className='text-sm md:text-base text-gray-600 mt-1'>{subtitle}</p>
+          <p className='text-sm md:text-base text-gray-600'>{subtitle}</p>
         )}
       </div>
 
