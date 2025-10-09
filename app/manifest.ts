@@ -1,5 +1,5 @@
-import type { MetadataRoute } from "next"
-import { APP_CONFIG } from "@/lib/constants"
+import type { MetadataRoute } from "next";
+import { APP_CONFIG } from "@/lib/constants";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -14,15 +14,15 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["lifestyle", "productivity", "social"],
     icons: [
       {
-        src: "/icon-192.png",
+        src: "/logo.png",
         sizes: "192x192",
         type: "image/png",
       },
       {
-        src: "/icon-512.png",
+        src: "/logo.png",
         sizes: "512x512",
         type: "image/png",
       },
     ],
-  }
+  };
 }
