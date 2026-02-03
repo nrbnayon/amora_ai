@@ -13,13 +13,28 @@ export interface Wedding {
   id: string;
   userId: string;
   title: string;
+  groomName: string;
+  brideName: string;
   date: Date;
+  time?: string;
   venue?: string;
+  location?: string;
   budget: number;
   guestCount: number;
   culture?: string[];
   religion?: string[];
   status: "planning" | "confirmed" | "completed";
+  progress: number;
+  daysUntilEvent: number;
+  topPriorities?: string[];
+  entertainment?: string[];
+  weddingStyle?: string;
+  atmosphere?: string;
+  themeOrColor?: string;
+  culturalRituals?: string;
+  venuePreference?: string;
+  mealPreference?: string;
+  additionalNotes?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -112,12 +127,28 @@ export interface SignInFormData {
 }
 
 export interface OnboardingFormData {
-  guestCount: number;
-  budget: number;
-  culture: string[];
-  religion: string[];
-  weddingDate?: Date;
-  venue?: string;
+  // Step 1: Basic Information
+  yourName: string;
+  partnerName: string;
+  weddingLocation: string;
+  weddingDate: string;
+  
+  // Step 2: Budget & Priorities
+  budget: string;
+  topPriorities: string[];
+  entertainment: string[];
+  
+  // Step 3: Wedding Style & Theme
+  weddingStyle: string;
+  atmosphere: string;
+  themeOrColor?: string;
+  culturalRituals?: string;
+  
+  // Step 4: Guest Details & Venue
+  guestCount: string;
+  venuePreference: string;
+  mealPreference: string;
+  additionalNotes?: string;
 }
 
 // API Response types

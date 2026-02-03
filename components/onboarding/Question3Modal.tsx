@@ -1,8 +1,7 @@
-// components/onboarding/Question3.tsx
+// components/onboarding/Question3Modal.tsx
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { OnboardingLayout } from "@/components/onboarding/OnboardingLayout";
+import { ProgressIndicator } from "./ProgressIndicator";
 import {
   question3Schema,
   type Question3FormData,
@@ -32,8 +31,13 @@ const atmosphereOptions = [
   { value: "others", label: "Others" },
 ];
 
-export function Question3() {
-  const router = useRouter();
+interface Question3Props {
+  onNext: (data: Question3FormData) => void;
+  currentStep: number;
+  totalSteps: number;
+}
+
+export function Question3({ onNext, currentStep, totalSteps }: Question3Props) {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const {
@@ -44,17 +48,19 @@ export function Question3() {
     setError,
   } = useForm<Question3FormData>({
     resolver: zodResolver(question3Schema),
+    defaultValues: {
+      weddingStyle: "",
+      atmosphere: "",
+      themeOrColor: "",
+      culturalRituals: "",
+    },
   });
 
   const onSubmit = async (data: Question3FormData) => {
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Question 3 data:", data);
-
-      sessionStorage.setItem("question3", JSON.stringify(data));
-
-      router.push("/question4");
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      onNext(data);
     } catch (error) {
       setError("root", {
         message: "Something went wrong. Please try again.",
@@ -65,14 +71,19 @@ export function Question3() {
   };
 
   return (
-    <OnboardingLayout
-      title="Wedding Style & Theme"
-      description="Select your wedding style & theme to plan your wedding"
-      currentStep={3}
-      totalSteps={4}
-    >
+    <div className="p-8">
+      <ProgressIndicator currentStep={currentStep} totalSteps={totalSteps} />
+
+      <div className="mb-6 mt-6">
+        <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+          Wedding Style & Theme
+        </h2>
+        <p className="text-sm text-gray-600">
+          Select the wedding style & theme to plan your wedding
+        </p>
+      </div>
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Wedding Style */}
         <div className="space-y-3">
           <Label className="text-sm font-medium text-gray-900">
             What type of wedding style do you prefer?
@@ -84,17 +95,11 @@ export function Question3() {
               <RadioGroup
                 onValueChange={field.onChange}
                 value={field.value}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+                className="grid grid-cols-2 gap-y-3 gap-x-4"
               >
                 {weddingStyleOptions.map((option) => (
-                  <div
-                    key={option.value}
-                    className="flex items-center space-x-2"
-                  >
-                    <RadioGroupItem
-                      value={option.value}
-                      id={`style-${option.value}`}
-                    />
+                  <div key={option.value} className="flex items-center space-x-2">
+                    <RadioGroupItem value={option.value} id={`style-${option.value}`} />
                     <Label
                       htmlFor={`style-${option.value}`}
                       className="text-sm font-normal cursor-pointer text-gray-900"
@@ -107,13 +112,10 @@ export function Question3() {
             )}
           />
           {errors.weddingStyle && (
-            <p className="text-sm text-red-500">
-              {errors.weddingStyle.message}
-            </p>
+            <p className="text-sm text-red-500">{errors.weddingStyle.message}</p>
           )}
         </div>
 
-        {/* Atmosphere */}
         <div className="space-y-3">
           <Label className="text-sm font-medium text-gray-900">
             What kind of atmosphere do you want
@@ -125,17 +127,11 @@ export function Question3() {
               <RadioGroup
                 onValueChange={field.onChange}
                 value={field.value}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+                className="grid grid-cols-2 gap-y-3 gap-x-4"
               >
                 {atmosphereOptions.map((option) => (
-                  <div
-                    key={option.value}
-                    className="flex items-center space-x-2"
-                  >
-                    <RadioGroupItem
-                      value={option.value}
-                      id={`atmosphere-${option.value}`}
-                    />
+                  <div key={option.value} className="flex items-center space-x-2">
+                    <RadioGroupItem value={option.value} id={`atmosphere-${option.value}`} />
                     <Label
                       htmlFor={`atmosphere-${option.value}`}
                       className="text-sm font-normal cursor-pointer text-gray-900"
@@ -152,12 +148,8 @@ export function Question3() {
           )}
         </div>
 
-        {/* Theme or Color Scheme */}
         <div className="space-y-2">
-          <Label
-            htmlFor="themeOrColor"
-            className="text-sm font-medium text-gray-900"
-          >
+          <Label htmlFor="themeOrColor" className="text-sm font-medium text-gray-900">
             Do you have a specific theme or color scheme in mind?
           </Label>
           <Input
@@ -167,19 +159,10 @@ export function Question3() {
             className="h-12 bg-white border-gray-200"
             {...register("themeOrColor")}
           />
-          {errors.themeOrColor && (
-            <p className="text-sm text-red-500">
-              {errors.themeOrColor.message}
-            </p>
-          )}
         </div>
 
-        {/* Cultural or Religious Rituals */}
         <div className="space-y-2">
-          <Label
-            htmlFor="culturalRituals"
-            className="text-sm font-medium text-gray-900"
-          >
+          <Label htmlFor="culturalRituals" className="text-sm font-medium text-gray-900">
             Are there any cultural or religious rituals that must be included?
           </Label>
           <Input
@@ -189,30 +172,19 @@ export function Question3() {
             className="h-12 bg-white border-gray-200"
             {...register("culturalRituals")}
           />
-          {errors.culturalRituals && (
-            <p className="text-sm text-red-500">
-              {errors.culturalRituals.message}
-            </p>
-          )}
         </div>
 
-        {/* Info Text */}
         <p className="text-sm text-gray-600">
           You'll be able to update all the answers later
         </p>
 
-        {/* Error Message */}
         {errors.root && (
-          <p className="text-sm text-red-500 text-center">
-            {errors.root.message}
-          </p>
+          <p className="text-sm text-red-500 text-center">{errors.root.message}</p>
         )}
 
-        {/* Submit Button */}
         <Button
           type="submit"
-          className="w-full h-12 text-white font-medium"
-          style={{ backgroundColor: "#8B1874" }}
+          className="w-full h-12 text-white font-medium bg-primary hover:bg-primary/80"
           disabled={isLoading}
         >
           {isLoading ? (
@@ -225,6 +197,6 @@ export function Question3() {
           )}
         </Button>
       </form>
-    </OnboardingLayout>
+    </div>
   );
 }

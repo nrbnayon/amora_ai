@@ -1,15 +1,30 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
 
 export function WelcomeModal() {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
+
+  useEffect(() => {
+    const hasSeenModal = localStorage.getItem("hasSeenWelcomeModal")
+    if (!hasSeenModal) {
+      setIsOpen(true)
+    }
+  }, [])
+
+  const handleClose = () => {
+    localStorage.setItem("hasSeenWelcomeModal", "true")
+    setIsOpen(false)
+  }
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={(open) => {
+      if (!open) handleClose();
+      else setIsOpen(true);
+    }}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader className="text-center space-y-4 px-5">
           <div className="mx-auto">
@@ -29,7 +44,7 @@ export function WelcomeModal() {
         <div className="flex justify-center">
           <Button
             size="lg"
-            onClick={() => setIsOpen(false)}
+            onClick={handleClose}
             className="w-[80%] bg-primary text-primary-foreground hover:bg-primary/90"
           >
             Get Started

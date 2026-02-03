@@ -34,7 +34,26 @@ export function SignInForm() {
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
       console.log("Sign in data:", data);
-      router.push("/question1");
+
+      // Dummy Credential Bypass for testing
+      if (data.email === "user@gmail.com" || data.email === "admin@gmail.com") {
+        const role = data.email === "admin@gmail.com" ? "admin" : "user";
+        const token = data.email === "admin@gmail.com" ? "dev-admin-token" : "dev-user-token";
+        
+        // Set cookies for middleware
+        document.cookie = `accessToken=${token}; path=/; max-age=${7 * 24 * 60 * 60}`;
+        document.cookie = `userRole=${role}; path=/; max-age=${7 * 24 * 60 * 60}`;
+
+        if (role === "admin") {
+          router.push("/admin/dashboard");
+        } else {
+          router.push("/dashboard/all-weddings");
+        }
+        return;
+      }
+
+      // Normal flow (redirect to all-weddings for now)
+      router.push("/dashboard/all-weddings");
     } catch (error) {
       setError("root", {
         message: "Invalid email or password. Please try again.",

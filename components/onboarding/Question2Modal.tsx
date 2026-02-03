@@ -1,8 +1,7 @@
-// components/onboarding/Question2.tsx
+// components/onboarding/Question2Modal.tsx
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { OnboardingLayout } from "@/components/onboarding/OnboardingLayout";
+import { ProgressIndicator } from "./ProgressIndicator";
 import {
   question2Schema,
   type Question2FormData,
@@ -33,8 +32,13 @@ const entertainmentOptions = [
   { id: "others", label: "Others" },
 ];
 
-export function Question2() {
-  const router = useRouter();
+interface Question2Props {
+  onNext: (data: Question2FormData) => void;
+  currentStep: number;
+  totalSteps: number;
+}
+
+export function Question2({ onNext, currentStep, totalSteps }: Question2Props) {
   const [isLoading, setIsLoading] = React.useState(false);
 
   const {
@@ -46,6 +50,7 @@ export function Question2() {
   } = useForm<Question2FormData>({
     resolver: zodResolver(question2Schema),
     defaultValues: {
+      budget: "",
       topPriorities: [],
       entertainment: [],
     },
@@ -54,12 +59,8 @@ export function Question2() {
   const onSubmit = async (data: Question2FormData) => {
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Question 2 data:", data);
-
-      sessionStorage.setItem("question2", JSON.stringify(data));
-
-      router.push("/question3");
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      onNext(data);
     } catch (error) {
       setError("root", {
         message: "Something went wrong. Please try again.",
@@ -70,17 +71,22 @@ export function Question2() {
   };
 
   return (
-    <OnboardingLayout
-      title="Budget & Priorities"
-      description="Let's start with a few details about your budget & preferences"
-      currentStep={2}
-      totalSteps={4}
-    >
+    <div className="p-8">
+      <ProgressIndicator currentStep={currentStep} totalSteps={totalSteps} />
+
+      <div className="mb-6 mt-6">
+        <h2 className="text-2xl font-semibold text-gray-900 mb-2">
+          Budget & Priorities
+        </h2>
+        <p className="text-sm text-gray-600">
+          Let's start with a few details about your budget & preferences
+        </p>
+      </div>
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Budget Field */}
         <div className="space-y-2">
           <Label htmlFor="budget" className="text-sm font-medium text-gray-900">
-            What is your total budget for the wedding?
+            What is the total budget for the wedding?
           </Label>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
@@ -88,7 +94,7 @@ export function Question2() {
             </span>
             <Input
               id="budget"
-              type="number"
+              type="text"
               placeholder="Enter amount"
               className="h-12 pl-8 bg-white border-gray-200"
               {...register("budget")}
@@ -99,7 +105,6 @@ export function Question2() {
           )}
         </div>
 
-        {/* Top Priorities */}
         <div className="space-y-3">
           <Label className="text-sm font-medium text-gray-900">
             Top Priorities
@@ -108,19 +113,18 @@ export function Question2() {
             name="topPriorities"
             control={control}
             render={({ field }) => (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-y-3 gap-x-4">
                 {topPrioritiesOptions.map((option) => (
                   <div key={option.id} className="flex items-center space-x-2">
                     <Checkbox
                       id={`priority-${option.id}`}
                       checked={field.value?.includes(option.id)}
                       onCheckedChange={(checked) => {
+                        const current = field.value || [];
                         if (checked) {
-                          field.onChange([...field.value, option.id]);
+                          field.onChange([...current, option.id]);
                         } else {
-                          field.onChange(
-                            field.value.filter((val) => val !== option.id)
-                          );
+                          field.onChange(current.filter((val) => val !== option.id));
                         }
                       }}
                     />
@@ -136,13 +140,10 @@ export function Question2() {
             )}
           />
           {errors.topPriorities && (
-            <p className="text-sm text-red-500">
-              {errors.topPriorities.message}
-            </p>
+            <p className="text-sm text-red-500">{errors.topPriorities.message}</p>
           )}
         </div>
 
-        {/* Entertainment */}
         <div className="space-y-3">
           <Label className="text-sm font-medium text-gray-900">
             Would you like entertainment arranged?
@@ -151,19 +152,18 @@ export function Question2() {
             name="entertainment"
             control={control}
             render={({ field }) => (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-y-3 gap-x-4">
                 {entertainmentOptions.map((option) => (
                   <div key={option.id} className="flex items-center space-x-2">
                     <Checkbox
                       id={`entertainment-${option.id}`}
                       checked={field.value?.includes(option.id)}
                       onCheckedChange={(checked) => {
+                        const current = field.value || [];
                         if (checked) {
-                          field.onChange([...field.value, option.id]);
+                          field.onChange([...current, option.id]);
                         } else {
-                          field.onChange(
-                            field.value.filter((val) => val !== option.id)
-                          );
+                          field.onChange(current.filter((val) => val !== option.id));
                         }
                       }}
                     />
@@ -179,29 +179,21 @@ export function Question2() {
             )}
           />
           {errors.entertainment && (
-            <p className="text-sm text-red-500">
-              {errors.entertainment.message}
-            </p>
+            <p className="text-sm text-red-500">{errors.entertainment.message}</p>
           )}
         </div>
 
-        {/* Info Text */}
         <p className="text-sm text-gray-600">
           You'll be able to update all the answers later
         </p>
 
-        {/* Error Message */}
         {errors.root && (
-          <p className="text-sm text-red-500 text-center">
-            {errors.root.message}
-          </p>
+          <p className="text-sm text-red-500 text-center">{errors.root.message}</p>
         )}
 
-        {/* Submit Button */}
         <Button
           type="submit"
-          className="w-full h-12 text-white font-medium"
-          style={{ backgroundColor: "#8B1874" }}
+          className="w-full h-12 text-white font-medium bg-primary hover:bg-primary/90"
           disabled={isLoading}
         >
           {isLoading ? (
@@ -214,6 +206,6 @@ export function Question2() {
           )}
         </Button>
       </form>
-    </OnboardingLayout>
+    </div>
   );
 }

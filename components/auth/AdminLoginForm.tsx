@@ -49,22 +49,26 @@ export function AdminLoginForm() {
   const onSubmit = async (data: AdminLoginFormData) => {
     setIsLoading(true);
     try {
-      // TODO: Replace with actual API call
-      // const response = await fetch("/api/admin/login", {
-      //   method: "POST",
-      //   headers: { "Content-Type": "application/json" },
-      //   body: JSON.stringify(data),
-      // });
+      // Mock delay
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      console.log("Admin sign in data:", data);
 
-      // if (!response.ok) {
-      //   throw new Error("Invalid credentials");
-      // }
+      // Dummy Credential Bypass for testing
+      if (data.email === "admin@gmail.com") {
+        document.cookie = `accessToken=dev-admin-token; path=/; max-age=${7 * 24 * 60 * 60}`;
+        document.cookie = `userRole=admin; path=/; max-age=${7 * 24 * 60 * 60}`;
+        router.push("/admin/dashboard");
+        return;
+      }
 
-      // const result = await response.json();
+      if (data.email === "user@gmail.com") {
+        document.cookie = `accessToken=dev-user-token; path=/; max-age=${7 * 24 * 60 * 60}`;
+        document.cookie = `userRole=user; path=/; max-age=${7 * 24 * 60 * 60}`;
+        router.push("/dashboard/all-weddings");
+        return;
+      }
 
-      // Store token/session
-      // localStorage.setItem("adminToken", result.token);
-
+      // For other emails, automatically navigate to admin dashboard for demo
       router.push("/admin/dashboard");
     } catch (error) {
       setError("root", {

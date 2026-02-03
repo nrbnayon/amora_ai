@@ -20,6 +20,7 @@ import {
   Menu,
   X,
   BanknoteArrowUp,
+  CalendarHeart,
 } from "lucide-react";
 
 interface MenuItem {
@@ -45,6 +46,11 @@ export default function DashboardSidebar() {
   // Menu items memoized to prevent re-renders
   const menuItems: MenuItem[] = useMemo(
     () => [
+      {
+        name: "All Weddings",
+        href: "/dashboard/all-weddings",
+        icon: CalendarHeart,
+      },
       {
         name: "My Wedding",
         href: "/dashboard",
