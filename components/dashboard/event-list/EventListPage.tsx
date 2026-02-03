@@ -1,11 +1,11 @@
 // components/event-list/EventListPage.tsx
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { EventCard } from "./EventCard";
 import { AddEventSheet } from "./AddEventSheet";
 import { EditEventSheet } from "./EditEventSheet";
 import { ExportSheet } from "./ExportSheet";
-import { Plus, SquareArrowOutUpRight } from "lucide-react";
+import { Sparkles, SquareArrowOutUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
@@ -17,6 +17,7 @@ export interface Event {
   endTime: string;
   location: string;
   description: string;
+  status?: "pending" | "completed";
 }
 
 const initialEvents: Event[] = [
@@ -28,6 +29,7 @@ const initialEvents: Event[] = [
     endTime: "11:00 am",
     location: "Family Home",
     description: "Casual Gathering",
+    status: "pending",
   },
   {
     id: "2",
@@ -73,6 +75,7 @@ const initialEvents: Event[] = [
     endTime: "11:00 am",
     location: "Family Home",
     description: "Casual Gathering",
+    status: "completed",
   },
   {
     id: "7",
@@ -100,6 +103,7 @@ const initialEvents: Event[] = [
     endTime: "11:00 am",
     location: "Family Home",
     description: "Casual Gathering",
+    status: "completed",
   },
   {
     id: "10",
@@ -207,8 +211,8 @@ export default function EventListPage() {
               onClick={() => setIsAddSheetOpen(true)}
               className="bg-primary text-white hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"
             >
-              <Plus className="w-4 h-4" />
-              Add Event
+              <Sparkles className="w-4 h-4" />
+              Generate Timeline
             </Button>
           </div>
         </div>

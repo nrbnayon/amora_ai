@@ -76,6 +76,11 @@ export function EventCard({ event, onEdit, onDelete }: EventCardProps) {
         </div>
 
         <div className="flex gap-3 justify-end">
+          {event.status === "completed" && (
+            <p className="bg-[#D5FFD8] px-8 text-[#3AB550] py-2 rounded-md transition-colors">
+              Completed
+            </p>
+          )}
           <Button
             size="lg"
             onClick={() => onEdit(event)}

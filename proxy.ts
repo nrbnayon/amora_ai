@@ -17,6 +17,15 @@ type Role = (typeof ROLES)[keyof typeof ROLES];
 // Public routes (no authentication required)
 const PUBLIC_ROUTES = [
   "/",
+  "/sign-in",
+  "/sign-up",
+  "/forgot-password",
+  "/reset-password",
+  "/verify-otp",
+  "/verify-reset-otp",
+  "/verification-success",
+  "/admin-login",
+  "/admin-forgot-password",
 ];
 
 // Auth routes (redirect to dashboard if already logged in)
@@ -217,7 +226,7 @@ export async function proxy(request: NextRequest) {
   // To be safe and "secure", we treat non-public routes as protected by default.
   
   if (!isAuthenticated) {
-    const loginUrl = new URL("/signin", request.url);
+    const loginUrl = new URL("/", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     console.log("❌ Unauthorized - Redirecting to login");
     return NextResponse.redirect(loginUrl);
