@@ -1,4 +1,7 @@
+'use client';
+
 import React from "react";
+import { motion } from "motion/react";
 import { Button } from "../ui/button";
 
 const features = [
@@ -36,15 +39,33 @@ export const WeddingPlanningSection = () => {
     <div className='max-w-7xl mx-auto py-20  w-full'>
       <section className='flex flex-col w-full items-start gap-6'>
         {features.map((feature, index) => (
-          <div key={index} className='flex items-center gap-8 w-full'>
+          <motion.div 
+            key={index} 
+            className='flex items-center gap-8 w-full'
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.7, delay: index * 0.1, ease: [0.25, 0.4, 0.25, 1] }}
+          >
             {feature.imagePosition === "left" ? (
               <>
-                <img
+                <motion.img
                   className={`flex-1 h-[340px] rounded-2xl ${feature.imageClass}`}
                   alt={feature.imageAlt}
                   src={feature.imageSrc}
+                  initial={{ x: -60, opacity: 0 }}
+                  whileInView={{ x: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
+                  whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
                 />
-                <div className='flex flex-col items-start gap-8 flex-1'>
+                <motion.div 
+                  className='flex flex-col items-start gap-8 flex-1'
+                  initial={{ x: 60, opacity: 0 }}
+                  whileInView={{ x: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, delay: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
+                >
                   <div className='flex flex-col items-start gap-4 w-full'>
                     <h2 className='  font-semibold  text-primary-dark text-4xl tracking-[0] leading-12'>
                       {feature.title}
@@ -53,17 +74,28 @@ export const WeddingPlanningSection = () => {
                       {feature.description}
                     </p>
                   </div>
-                  <Button
-                    size='lg'
-                    className='bg-primary text-white hover:bg-primary/90'
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    Try for free
-                  </Button>
-                </div>
+                    <Button
+                      size='lg'
+                      className='bg-primary text-white hover:bg-primary/90 transition-all duration-300'
+                    >
+                      Try for free
+                    </Button>
+                  </motion.div>
+                </motion.div>
               </>
             ) : (
               <>
-                <div className='flex flex-col items-start gap-8 flex-1'>
+                <motion.div 
+                  className='flex flex-col items-start gap-8 flex-1'
+                  initial={{ x: -60, opacity: 0 }}
+                  whileInView={{ x: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, delay: 0.3, ease: [0.25, 0.4, 0.25, 1] }}
+                >
                   <div className='flex flex-col items-start gap-4 w-full'>
                     <h2 className='  font-semibold  text-primary-dark text-4xl tracking-[0] leading-12'>
                       {feature.title}
@@ -72,21 +104,31 @@ export const WeddingPlanningSection = () => {
                       {feature.description}
                     </p>
                   </div>
-                  <Button
-                    size='lg'
-                    className='bg-primary text-white hover:bg-primary/90'
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    Try for free
-                  </Button>
-                </div>
-                <img
+                    <Button
+                      size='lg'
+                      className='bg-primary text-white hover:bg-primary/90 transition-all duration-300'
+                    >
+                      Try for free
+                    </Button>
+                  </motion.div>
+                </motion.div>
+                <motion.img
                   className={`flex-1 h-[340px] rounded-2xl ${feature.imageClass}`}
                   alt={feature.imageAlt}
                   src={feature.imageSrc}
+                  initial={{ x: 60, opacity: 0 }}
+                  whileInView={{ x: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.7, delay: 0.2, ease: [0.25, 0.4, 0.25, 1] }}
+                  whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
                 />
               </>
             )}
-          </div>
+          </motion.div>
         ))}
       </section>
     </div>

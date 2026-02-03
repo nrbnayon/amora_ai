@@ -8,6 +8,7 @@ import { VenueDescriptionSection } from "@/components/landing/VenueDescriptionSe
 import { WeddingPlanningSection } from "@/components/landing/WeddingPlanningSection";
 import Navbar from "@/components/layout/navbar";
 import { generateSEO } from "@/lib/seo";
+import { AnimatedSection } from "@/components/animations/AnimatedSection";
 
 export const metadata = generateSEO({
   title: "AI-Powered Wedding Planning Platform",
@@ -28,13 +29,27 @@ export default function Home() {
     <>
       <Navbar />
       <HeroScetion />
-      <PlannerSection />
-      <AIFeaturesSection />
-      <WeddingPlanningSection />
-      <ServicesOverviewSection />
-      <FeaturedPlannerSection />
-      <VenueDescriptionSection />
-      <Footer />
+      <AnimatedSection direction="up" delay={0.1}>
+        <PlannerSection />
+      </AnimatedSection>
+      <AnimatedSection direction="up" delay={0.1}>
+        <AIFeaturesSection />
+      </AnimatedSection>
+      <AnimatedSection direction="up" delay={0.1}>
+        <WeddingPlanningSection />
+      </AnimatedSection>
+      <AnimatedSection direction="up" delay={0.1}>
+        <ServicesOverviewSection />
+      </AnimatedSection>
+      <AnimatedSection direction="up" delay={0.1}>
+        <FeaturedPlannerSection />
+      </AnimatedSection>
+      <AnimatedSection direction="up" delay={0.1}>
+        <VenueDescriptionSection />
+      </AnimatedSection>
+      <AnimatedSection direction="up" delay={0.1}>
+        <Footer />
+      </AnimatedSection>
     </>
   );
 }

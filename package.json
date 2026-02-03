@@ -27,7 +27,11 @@
     "geist": "latest",
     "lucide-react": "^0.544.0",
     "motion": "^12.23.22",
+<<<<<<< HEAD
     "next": "15.5.9",
+=======
+    "next": "^16.1.6",
+>>>>>>> a4c2eab (feat: Implement initial landing page structure with core sections, animation components, navigation, and updated project dependencies and configuration.)
     "next-themes": "latest",
     "react": "19.1.0",
     "react-dom": "19.1.0",
