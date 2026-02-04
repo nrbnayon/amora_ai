@@ -26,7 +26,7 @@ const adminLoginSchema = z.object({
     ),
   password: z
     .string()
-    .min(8, "Password must be at least 8 characters")
+    .min(4, "Password must be at least 4 characters")
     .max(100, "Password is too long"),
 });
 
@@ -80,7 +80,7 @@ export function AdminLoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100 p-4">
       <div className="w-full max-w-md bg-white rounded-2xl p-8 shadow-lg">
         {/* Header */}
         <div className="flex flex-col items-center space-y-4 mb-8">
