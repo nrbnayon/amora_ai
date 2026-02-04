@@ -1,6 +1,7 @@
 // components/settings/SettingsPage.tsx
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { SquarePen } from "lucide-react";
 import { UpdateUsernameSheet } from "./UpdateUsernameSheet";
@@ -19,6 +20,7 @@ import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
 export default function SettingsPage() {
+  const router = useRouter();
   const [isUsernameSheetOpen, setIsUsernameSheetOpen] = useState(false);
   const [isPasswordSheetOpen, setIsPasswordSheetOpen] = useState(false);
   const [isSignOutDialogOpen, setIsSignOutDialogOpen] = useState(false);
@@ -42,10 +44,17 @@ export default function SettingsPage() {
   };
 
   const handleConfirmSignOut = () => {
+    // Clear all cookies using max-age=0 (most reliable method)
+    document.cookie = "accessToken=; path=/; max-age=0;";
+    document.cookie = "userRole=; path=/; max-age=0;";
+
     toast.success("Signed out successfully");
     setIsSignOutDialogOpen(false);
-    // Add sign out logic here
-    // Example: router.push('/login');
+
+    // Small delay to ensure cookies are cleared before redirect
+    setTimeout(() => {
+      router.push("/");
+    }, 100);
   };
 
   const handleCancelSignOut = () => {
